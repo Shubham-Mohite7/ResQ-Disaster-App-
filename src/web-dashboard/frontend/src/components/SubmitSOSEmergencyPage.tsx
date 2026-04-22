@@ -198,12 +198,16 @@ const SubmitSOSEmergencyPage: React.FC = () => {
     );
   }
 
-  const sriLankaDistricts = [
-    'Colombo', 'Gampaha', 'Kalutara', 'Kandy', 'Matale', 'Nuwara Eliya',
-    'Galle', 'Matara', 'Hambantota', 'Jaffna', 'Kilinochchi', 'Mannar',
-    'Vavuniya', 'Mullaitivu', 'Batticaloa', 'Ampara', 'Trincomalee',
-    'Kurunegala', 'Puttalam', 'Anuradhapura', 'Polonnaruwa', 'Badulla',
-    'Monaragala', 'Ratnapura', 'Kegalle'
+  const indianStates = [
+    'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa',
+    'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala',
+    'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland',
+    'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura',
+    'Uttar Pradesh', 'Uttarakhand', 'West Bengal', 'Delhi', 'Mumbai', 'Kolkata', 'Chennai',
+    'Bengaluru', 'Hyderabad', 'Pune', 'Ahmedabad', 'Surat', 'Jaipur', 'Lucknow', 'Kanpur',
+    'Nagpur', 'Indore', 'Thane', 'Bhopal', 'Visakhapatnam', 'Pimpri-Chinchwad', 'Patna',
+    'Vadodara', 'Ghaziabad', 'Ludhiana', 'Agra', 'Nashik', 'Faridabad', 'Meerut',
+    'Rajkot', 'Kalyan-Dombivali', 'Vasai-Virar', 'Varanasi', 'Srinagar', 'Dhanbad', 'Jodhpur'
   ];
 
   return (
@@ -306,27 +310,29 @@ const SubmitSOSEmergencyPage: React.FC = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="district-select" className="block text-sm font-medium text-gray-700 mb-2">
                     District
                   </label>
                   <select
+                    id="district-select"
                     name="district"
                     value={formData.district}
                     onChange={handleChange}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
                     <option value="">Select District</option>
-                    {sriLankaDistricts.map(district => (
-                      <option key={district} value={district}>{district}</option>
+                    {indianStates.map(state => (
+                      <option key={state} value={state}>{state}</option>
                     ))}
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="landmark-input" className="block text-sm font-medium text-gray-700 mb-2">
                     Landmark
                   </label>
                   <input
+                    id="landmark-input"
                     type="text"
                     name="landmark"
                     value={formData.landmark}
@@ -337,10 +343,11 @@ const SubmitSOSEmergencyPage: React.FC = () => {
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="address-textarea" className="block text-sm font-medium text-gray-700 mb-2">
                     Full Address
                   </label>
                   <textarea
+                    id="address-textarea"
                     name="address"
                     value={formData.address}
                     onChange={handleChange}
@@ -391,10 +398,11 @@ const SubmitSOSEmergencyPage: React.FC = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="emergency-type-select" className="block text-sm font-medium text-gray-700 mb-2">
                     Emergency Type <span className="text-red-500">*</span>
                   </label>
                   <select
+                    id="emergency-type-select"
                     name="emergencyType"
                     value={formData.emergencyType}
                     onChange={handleChange}
@@ -420,24 +428,27 @@ const SubmitSOSEmergencyPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="people-count-input" className="block text-sm font-medium text-gray-700 mb-2">
                     Number of People
                   </label>
                   <input
+                    id="people-count-input"
                     type="number"
                     name="numberOfPeople"
                     value={formData.numberOfPeople}
                     onChange={handleChange}
                     min="1"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Enter number of people affected"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="water-level-select" className="block text-sm font-medium text-gray-700 mb-2">
                     Water Level
                   </label>
                   <select
+                    id="water-level-select"
                     name="waterLevel"
                     value={formData.waterLevel}
                     onChange={handleChange}

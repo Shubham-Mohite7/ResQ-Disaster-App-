@@ -12,6 +12,31 @@ class MockSLUDIService {
     const { individualId, request } = authRequest;
     
     try {
+      // Hardcoded admin credentials fallback
+      if (individualId === 'admin' && request.otp === 'admin') {
+        const adminUser = {
+          individualId: 'admin',
+          name: 'System Administrator',
+          email: 'admin@resq.com',
+          phone: '+911234567890',
+          role: 'admin',
+          active: true,
+          location: { lat: 28.6139, lng: 77.2090 }
+        };
+        
+        return {
+          id: authRequest.id,
+          version: authRequest.version,
+          transactionID: authRequest.transactionID,
+          responseTime: new Date().toISOString(),
+          response: {
+            authStatus: true,
+            authToken: this.generateMockToken(adminUser)
+          },
+          errors: null
+        };
+      }
+      
       // Fetch user from database
       const user = await User.findOne({ individualId, active: true });
       
@@ -82,6 +107,39 @@ class MockSLUDIService {
   // Mock eKYC endpoint
   async performKYC(kycRequest) {
     const { individualId, allowedKycAttributes } = kycRequest;
+    
+    // Hardcoded admin fallback for KYC
+    if (individualId === 'admin') {
+      const adminUser = {
+        individualId: 'admin',
+        name: 'System Administrator',
+        email: 'admin@resq.com',
+        phone: '+911234567890',
+        role: 'admin',
+        active: true,
+        location: { lat: 28.6139, lng: 77.2090 }
+      };
+      
+      const kycData = {};
+      if (allowedKycAttributes.includes('name')) kycData.name = adminUser.name;
+      if (allowedKycAttributes.includes('email')) kycData.email = adminUser.email;
+      if (allowedKycAttributes.includes('phone')) kycData.phone = adminUser.phone;
+      if (allowedKycAttributes.includes('role')) kycData.role = adminUser.role;
+      
+      return {
+        id: kycRequest.id,
+        version: kycRequest.version,
+        transactionID: kycRequest.transactionID,
+        responseTime: new Date().toISOString(),
+        response: {
+          kycStatus: true,
+          authToken: this.generateMockToken(adminUser),
+          identity: kycData
+        },
+        errors: null
+      };
+    }
+    
     const user = await User.findOne({ individualId, active: true });
     
     if (user) {

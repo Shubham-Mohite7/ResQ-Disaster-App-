@@ -35,8 +35,8 @@ interface SosSignal {
   updated_at: string;
 }
 
-// Sri Lanka center coordinates
-const SRI_LANKA_CENTER: [number, number] = [7.8731, 80.7718];
+// India center coordinates
+const INDIA_CENTER: [number, number] = [20.5937, 78.9629];
 const DEFAULT_ZOOM = 8;
 
 // SOS Signals Layer Component
@@ -233,7 +233,7 @@ const SOSHeatMap: React.FC = () => {
               </div>
 
               <MapContainer
-                center={SRI_LANKA_CENTER}
+                center={INDIA_CENTER}
                 zoom={DEFAULT_ZOOM}
                 style={{ height: '100%', width: '100%' }}
                 className="z-0 rounded-lg"

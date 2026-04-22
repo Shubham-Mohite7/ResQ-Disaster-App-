@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { indiaFloodDataService, type WaterLevelReading } from '../services/indiaFloodDataService';
 import { Heart, Users, AlertCircle, Map as MapIcon, ArrowLeft, ExternalLink, RefreshCw, Layers, Filter, BarChart3, TrendingUp } from 'lucide-react';
 import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
@@ -7,6 +8,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import { API_BASE_URL } from '../config/api';
 
 // Fix for default markers
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -197,8 +199,8 @@ const ReliefTrackerPage: React.FC = () => {
         baseParams.append('status', statusFilter);
       }
 
-      // Fetch data from Sri Lanka Flood Relief Public Data API
-      const apiUrl = import.meta.env.VITE_PUBLIC_DATA_API_URL || 'https://api.floodsupport.org/default/sri-lanka-flood-relief-jm/v1.0';
+      // Fetch data from India Flood Relief Public Data API
+      const apiUrl = import.meta.env.VITE_PUBLIC_DATA_API_URL || 'https://api.floodsupport.org/default/india-flood-relief-jm/v1.0';
 
       // Import tokenManager dynamically
       const { default: tokenManager } = await import('../utils/tokenManager');
@@ -225,7 +227,7 @@ const ReliefTrackerPage: React.FC = () => {
 
       // Fetch MongoDB help requests - all pending reports (food, shelter, medical, danger)
       const mongoResponse = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/public/user-reports?status=pending&limit=100`
+        `${API_BASE_URL}/api/public/user-reports?status=pending&limit=100`
       ).catch(() => ({ data: { success: false, data: [] } }));
 
       // Public Data API response: { requests: [...], contributions: [...], meta: {...} }

@@ -4,6 +4,7 @@ import { Phone, AlertTriangle, Shield, MapPin, Users, RefreshCw } from 'lucide-r
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import CitizenNavbar from './CitizenNavbar';
+import { API_BASE_URL } from '../config/api';
 
 interface DistrictContact {
   district: string;
@@ -25,25 +26,29 @@ interface EmergencyStats {
   total_relief_camps: number;
 }
 
-const SRI_LANKA_DISTRICTS = [
-  'Colombo', 'Gampaha', 'Kalutara', 'Kandy', 'Matale', 'Nuwara Eliya',
-  'Galle', 'Matara', 'Hambantota', 'Jaffna', 'Kilinochchi', 'Mannar',
-  'Vavuniya', 'Mullaitivu', 'Batticaloa', 'Ampara', 'Trincomalee',
-  'Kurunegala', 'Puttalam', 'Anuradhapura', 'Polonnaruwa', 'Badulla',
-  'Moneragala', 'Ratnapura', 'Kegalle'
+const INDIAN_STATES = [
+  'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa',
+  'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala',
+  'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland',
+  'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura',
+  'Uttar Pradesh', 'Uttarakhand', 'West Bengal', 'Delhi', 'Mumbai', 'Kolkata', 'Chennai',
+  'Bengaluru', 'Hyderabad', 'Pune', 'Ahmedabad', 'Surat', 'Jaipur', 'Lucknow', 'Kanpur',
+  'Nagpur', 'Indore', 'Thane', 'Bhopal', 'Visakhapatnam', 'Pimpri-Chinchwad', 'Patna',
+  'Vadodara', 'Ghaziabad', 'Ludhiana', 'Agra', 'Nashik', 'Faridabad', 'Meerut',
+  'Rajkot', 'Kalyan-Dombivali', 'Vasai-Virar', 'Varanasi', 'Srinagar', 'Dhanbad', 'Jodhpur'
 ];
 
 const EMERGENCY_NUMBERS = [
-  { number: '117', label: 'Emergency', color: 'bg-red-600', icon: '🚨' },
-  { number: '119', label: 'Police', color: 'bg-blue-600', icon: '👮' },
-  { number: '110', label: 'Fire Brigade', color: 'bg-orange-600', icon: '🚒' },
+  { number: '112', label: 'Emergency', color: 'bg-red-600', icon: '🚨' },
+  { number: '100', label: 'Police', color: 'bg-blue-600', icon: '👮' },
+  { number: '101', label: 'Fire Brigade', color: 'bg-orange-600', icon: '🚒' },
   { number: '108', label: 'Ambulance', color: 'bg-green-600', icon: '🚑' }
 ];
 
 const EmergencyContactsPage: React.FC = () => {
   const navigate = useNavigate();
-  const [selectedDistrict, setSelectedDistrict] = useState<string>('Gampaha');
-  const [districtContact, setDistrictContact] = useState<DistrictContact | null>(null);
+  const [selectedState, setSelectedState] = useState<string>('Maharashtra');
+  const [stateContact, setStateContact] = useState<DistrictContact | null>(null);
   const [stats, setStats] = useState<EmergencyStats>({
     total_sos: 0,
     total_missing: 0,
@@ -60,10 +65,10 @@ const EmergencyContactsPage: React.FC = () => {
   }, []); // Only fetch stats once on mount
 
   useEffect(() => {
-    if (selectedDistrict) {
-      fetchDistrictContact();
+    if (selectedState) {
+      fetchStateContact();
     }
-  }, [selectedDistrict]); // Only fetch district contact when district changes
+  }, [selectedState]); // Only fetch state contact when state changes
 
   const fetchEmergencyStats = async () => {
     try {
@@ -108,18 +113,18 @@ const EmergencyContactsPage: React.FC = () => {
     }
   };
 
-  const fetchDistrictContact = async () => {
+  const fetchStateContact = async () => {
     setLoading(true);
     try {
-      console.log(`📞 Fetching DDMCU contact for ${selectedDistrict}...`);
+      console.log(`📞 Fetching SDMA contact for ${selectedState}...`);
       
       const response = await axios.get(
-        `${API_BASE_URL}/api/public/ddmcu-contacts?district=${selectedDistrict}`
+        `${API_BASE_URL}/api/public/sdma-contacts?state=${selectedState}`
       );
 
       if (response.data.success && response.data.data) {
-        console.log(`✅ Loaded DDMCU contact for ${selectedDistrict} (source: ${response.data.source})`);
-        setDistrictContact(response.data.data);
+        console.log(`✅ Loaded SDMA contact for ${selectedState} (source: ${response.data.source})`);
+        setStateContact(response.data.data);
         
         // Show notification if using local data (not yet in Supabase)
         if (response.data.source === 'local' && response.data.note) {
@@ -133,12 +138,12 @@ const EmergencyContactsPage: React.FC = () => {
       toast.error('Failed to load district contact');
       
       // Fallback to showing unavailable message
-      setDistrictContact({
-        district: selectedDistrict,
-        district_si: selectedDistrict,
-        district_ta: selectedDistrict,
+      setStateContact({
+        district: selectedState,
+        district_si: selectedState,
+        district_ta: selectedState,
         officer_name: 'Contact Information Not Available',
-        officer_title: 'Deputy Director (District)',
+        officer_title: 'Deputy Director (State)',
         office_phone: 'N/A',
         mobile_phone: 'N/A'
       });
@@ -205,7 +210,7 @@ const EmergencyContactsPage: React.FC = () => {
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-gray-900">General Emergency Numbers</h2>
-            <span className="text-sm text-gray-600">🇱🇰 Sri Lanka</span>
+            <span className="text-sm text-gray-600">�� India</span>
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -244,13 +249,14 @@ const EmergencyContactsPage: React.FC = () => {
               Select Your District
             </label>
             <select
-              value={selectedDistrict}
-              onChange={(e) => setSelectedDistrict(e.target.value)}
+              value={selectedState}
+              onChange={(e) => setSelectedState(e.target.value)}
               className="w-full md:w-1/2 px-4 py-3 border-2 border-gray-300 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              title="Select your state for disaster management contacts"
             >
-              {SRI_LANKA_DISTRICTS.sort().map((district) => (
-                <option key={district} value={district}>
-                  {district}
+              {INDIAN_STATES.sort().map((state) => (
+                <option key={state} value={state}>
+                  {state}
                 </option>
               ))}
             </select>
@@ -261,14 +267,14 @@ const EmergencyContactsPage: React.FC = () => {
               <RefreshCw className="h-8 w-8 animate-spin text-blue-600" />
               <span className="ml-3 text-gray-600">Loading contact information...</span>
             </div>
-          ) : districtContact ? (
+          ) : stateContact ? (
             <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-6 border-2 border-blue-200">
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h3 className="text-xl font-bold text-gray-900 mb-1">
-                    {districtContact.district} DDMCU
+                    {stateContact.district} SDMA
                   </h3>
-                  <p className="text-sm text-gray-600">District Disaster Management Centre Unit</p>
+                  <p className="text-sm text-gray-600">State Disaster Management Authority</p>
                 </div>
                 <Shield className="h-10 w-10 text-blue-600" />
               </div>
@@ -276,65 +282,65 @@ const EmergencyContactsPage: React.FC = () => {
               <div className="space-y-4">
                 <div className="bg-white rounded-lg p-4">
                   <p className="text-sm text-gray-600 mb-1">Officer in Charge</p>
-                  <p className="text-lg font-bold text-gray-900">{districtContact.officer_name}</p>
-                  <p className="text-sm text-gray-600">{districtContact.officer_title}</p>
+                  <p className="text-lg font-bold text-gray-900">{stateContact.officer_name}</p>
+                  <p className="text-sm text-gray-600">{stateContact.officer_title}</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <button
-                    onClick={() => handleCall(districtContact.office_phone)}
+                    onClick={() => handleCall(stateContact.office_phone)}
                     className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg p-4 transition-colors flex items-center justify-between"
                   >
                     <div className="text-left">
                       <p className="text-sm opacity-90">Office Phone</p>
-                      <p className="text-lg font-bold">{districtContact.office_phone}</p>
+                      <p className="text-lg font-bold">{stateContact.office_phone}</p>
                     </div>
                     <Phone className="h-6 w-6" />
                   </button>
 
                   <button
-                    onClick={() => handleCall(districtContact.mobile_phone)}
+                    onClick={() => handleCall(stateContact.mobile_phone)}
                     className="bg-green-600 hover:bg-green-700 text-white rounded-lg p-4 transition-colors flex items-center justify-between"
                   >
                     <div className="text-left">
                       <p className="text-sm opacity-90">Mobile Phone</p>
-                      <p className="text-lg font-bold">{districtContact.mobile_phone}</p>
+                      <p className="text-lg font-bold">{stateContact.mobile_phone}</p>
                     </div>
                     <Phone className="h-6 w-6" />
                   </button>
                 </div>
 
-                {districtContact.email && (
+                {stateContact.email && (
                   <div className="bg-white rounded-lg p-4">
                     <p className="text-sm text-gray-600 mb-1">Email</p>
                     <a 
-                      href={`mailto:${districtContact.email}`}
+                      href={`mailto:${stateContact.email}`}
                       className="text-blue-600 hover:underline"
                     >
-                      {districtContact.email}
+                      {stateContact.email}
                     </a>
                   </div>
                 )}
 
-                {districtContact.address && (
+                {stateContact.address && (
                   <div className="bg-white rounded-lg p-4">
                     <p className="text-sm text-gray-600 mb-1">Address</p>
-                    <p className="text-gray-900">{districtContact.address}</p>
+                    <p className="text-gray-900">{stateContact.address}</p>
                   </div>
                 )}
               </div>
 
               <div className="mt-4 p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded">
                 <p className="text-sm text-yellow-800">
-                  <strong>Important:</strong> This is the official contact for disaster management in your district. 
-                  For immediate life-threatening emergencies, call <strong>117</strong> first.
+                  <strong>Important:</strong> This is the official contact for disaster management in your state. 
+                  For immediate life-threatening emergencies, call <strong>112</strong> first.
                 </p>
               </div>
             </div>
           ) : (
             <div className="text-center py-12 text-gray-600">
               <Users className="h-16 w-16 mx-auto mb-4 text-gray-400" />
-              <p>No contact information available for this district</p>
+              <p>No contact information available for this state</p>
             </div>
           )}
         </div>

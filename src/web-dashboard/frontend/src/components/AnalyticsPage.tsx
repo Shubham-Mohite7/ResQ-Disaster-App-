@@ -255,20 +255,20 @@ const AnalyticsPage: React.FC = () => {
         <div className="bg-white border-b border-gray-200 px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <h1 className="text-2xl font-bold text-gray-900">Analytics Dashboard</h1>
-              <span className="text-sm text-gray-500">Real-time disaster response insights</span>
+              <h1 className="text-2xl font-bold text-gray-900">India Disaster Analytics Dashboard</h1>
+              <span className="text-sm text-gray-500">Real-time disaster response insights across Indian states</span>
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-500">
                 Last updated: {new Date().toLocaleString()}
               </span>
-              <button className="p-2 text-gray-400 hover:text-primary-600 rounded-lg hover:bg-primary-50">
+              <button className="p-2 text-gray-400 hover:text-primary-600 rounded-lg hover:bg-primary-50" aria-label="Refresh analytics data">
                 <RefreshCw className="w-5 h-5" />
               </button>
-              <button className="p-2 text-gray-400 hover:text-primary-600 rounded-lg hover:bg-primary-50">
+              <button className="p-2 text-gray-400 hover:text-primary-600 rounded-lg hover:bg-primary-50" aria-label="Download analytics report">
                 <Download className="w-5 h-5" />
               </button>
-              <button className="p-2 text-gray-400 hover:text-primary-600 rounded-lg hover:bg-primary-50">
+              <button className="p-2 text-gray-400 hover:text-primary-600 rounded-lg hover:bg-primary-50" aria-label="Analytics settings">
                 <Settings className="w-5 h-5" />
               </button>
             </div>
@@ -280,8 +280,9 @@ const AnalyticsPage: React.FC = () => {
             {/* Time Range Selector */}
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <span className="text-sm font-medium text-gray-700">Time Range:</span>
+                <label htmlFor="time-range-select" className="text-sm font-medium text-gray-700">Time Range:</label>
                 <select
+                  id="time-range-select"
                   value={timeRange}
                   onChange={(e) => setTimeRange(e.target.value)}
                   className="px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
@@ -304,8 +305,8 @@ const AnalyticsPage: React.FC = () => {
                       <MapPin className="w-6 h-6 text-primary-600" />
                     </div>
                     <div>
-                      <h2 className="text-xl font-semibold text-gray-900">Disaster Response Analytics</h2>
-                      <p className="text-sm text-gray-600">Real-time disaster management insights</p>
+                      <h2 className="text-xl font-semibold text-gray-900">India Disaster Response Analytics</h2>
+                      <p className="text-sm text-gray-600">Comprehensive disaster management insights across Indian states and territories</p>
                     </div>
                   </div>
                 </div>
@@ -320,17 +321,17 @@ const AnalyticsPage: React.FC = () => {
                   <StatCard
                     title="Affected Population"
                     value={formatNumber(analyticsData.disasterStats.overview?.total_affected_population || 0)}
-                    subtitle="2.3M people impacted"
+                    subtitle="Across Indian states"
                   />
                   <StatCard
                     title="Area Affected"
                     value={formatNumber(analyticsData.disasterStats.overview?.total_area_km2 || 0)}
-                    subtitle="km² coverage"
+                    subtitle="km² across India"
                   />
                   <StatCard
                     title="Avg Response Time"
                     value={formatDuration(analyticsData.disasterStats.overview?.average_duration_hours * 60 || 0)}
-                    subtitle="Target: < 2 hours"
+                    subtitle="NDMA standard: < 2 hours"
                   />
                 </div>
 

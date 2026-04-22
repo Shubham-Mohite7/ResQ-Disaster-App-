@@ -65,9 +65,20 @@ router.post('/login', async (req, res) => {
     if (authResponse.response.authStatus) {
       // Get user data from database for JWT payload
       const User = require('../models/User');
-      const userData = await User.findOne({ individualId });
+      let userData = await User.findOne({ individualId });
       
-      if (!userData) {
+      // If user not found in database but auth succeeded (admin fallback), create user data
+      if (!userData && individualId === 'admin') {
+        userData = {
+          individualId: 'admin',
+          name: 'System Administrator',
+          email: 'admin@resq.com',
+          phone: '+911234567890',
+          role: 'admin',
+          active: true,
+          location: { lat: 28.6139, lng: 77.2090 }
+        };
+      } else if (!userData) {
         return res.status(404).json({
           success: false,
           message: "User not found in database",

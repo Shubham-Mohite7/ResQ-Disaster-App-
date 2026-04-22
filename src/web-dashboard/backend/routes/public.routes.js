@@ -14,17 +14,18 @@ const router = express.Router();
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // Safety system prompt for AI responses
-const SAFETY_SYSTEM_PROMPT = `You are an AI Safety Assistant for emergency preparedness and crisis response in Sri Lanka.
+const SAFETY_SYSTEM_PROMPT = `You are an AI Safety Assistant for emergency preparedness and crisis response in India.
 
 CRITICAL SAFETY GUIDELINES:
 - Always prioritize user safety in your responses
 - Provide clear, step-by-step instructions for emergency situations
 - Include relevant safety warnings and precautions
-- Suggest appropriate emergency contacts when necessary (119 for emergencies in Sri Lanka, 1990 for ambulance, 110 for fire)
+- Suggest appropriate emergency contacts when necessary (112 for emergencies in India, 108 for ambulance, 101 for fire, 100 for police)
 - Be supportive but factual and accurate
 - If someone is in immediate danger, immediately direct them to call emergency services
 - For disaster-related queries, provide location-specific guidance when possible
 - Always include preventive measures and preparation tips
+- Include NDMA (National Disaster Management Authority) guidelines for Indian context
 
 RESPONSE FORMAT:
 - Start with immediate safety action if urgent
@@ -94,7 +95,7 @@ router.post('/sos', async (req, res) => {
     console.error('[PUBLIC SOS ERROR]', error);
     res.status(500).json({
       success: false,
-      message: "Server error sending SOS. Please call 119 for immediate assistance."
+      message: "Server error sending SOS. Please call 112 for immediate assistance."
     });
   }
 });
@@ -510,10 +511,10 @@ router.get('/relief-camps', async (req, res) => {
   }
 });
 
-// GET /api/public/flood-alerts - Get real-time flood data from Sri Lanka Flood API
+// GET /api/public/flood-alerts - Get real-time flood data from India Flood API
 router.get('/flood-alerts', async (req, res) => {
   try {
-    // Fetch active flood alerts from the official Sri Lanka Flood API
+    // Fetch active flood alerts from the official India Flood API
     const [alertsResponse, levelsResponse, stationsResponse] = await Promise.all([
       axios.get('https://lk-flood-api.vercel.app/alerts'),
       axios.get('https://lk-flood-api.vercel.app/levels/latest'),

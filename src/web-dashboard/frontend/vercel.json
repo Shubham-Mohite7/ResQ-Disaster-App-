@@ -1,7 +1,16 @@
 {
   "installCommand": "npm install --legacy-peer-deps",
-  "buildCommand": "npm run build",
+  "buildCommand": "vite build",
+  "env": {
+    "VITE_API_BASE_URL": "https://resq-backend-3efi.onrender.com",
+    "VITE_SUPABASE_URL": "@supabase_url",
+    "VITE_SUPABASE_ANON_KEY": "@supabase_anon_key"
+  },
   "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://resq-backend-3efi.onrender.com/api/$1"
+    },
     {
       "source": "/(.*)",
       "destination": "/index.html"

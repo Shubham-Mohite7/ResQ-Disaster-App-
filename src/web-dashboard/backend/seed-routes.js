@@ -2,38 +2,38 @@ const mongoose = require('mongoose');
 const RouteStatus = require('./models/RouteStatus');
 require('dotenv').config();
 
-const sriLankaRoutes = [
+const indianRoutes = [
   {
-    route_id: 'A1',
-    route_name: 'Colombo-Kandy Highway (A1)',
-    route_number: 'A1',
+    route_id: 'NH1',
+    route_name: 'Delhi-Jaipur Highway (NH48)',
+    route_number: 'NH48',
     route_type: 'highway',
     start_location: {
-      name: 'Colombo',
-      coordinates: [79.8612, 6.9271]
+      name: 'Delhi',
+      coordinates: [77.2090, 28.6139]
     },
     end_location: {
-      name: 'Kandy',
-      coordinates: [80.6337, 7.2906]
+      name: 'Jaipur',
+      coordinates: [75.7871, 26.9124]
     },
-    districts: ['Colombo', 'Gampaha', 'Kandy'],
-    provinces: ['Western', 'Central'],
-    distance_km: 115,
-    typical_travel_time_minutes: 180,
-    current_travel_time_minutes: 180,
+    districts: ['Delhi', 'Gurgaon', 'Jaipur'],
+    states: ['Delhi', 'Haryana', 'Rajasthan'],
+    distance_km: 280,
+    typical_travel_time_minutes: 300,
+    current_travel_time_minutes: 300,
     status: 'open',
     severity: 'normal',
-    description: 'Main highway connecting Colombo and Kandy - Clear',
+    description: 'Main highway connecting Delhi and Jaipur - Clear',
     traffic_density: 'moderate',
-    average_speed_kmh: 60,
+    average_speed_kmh: 70,
     emergency_vehicles_accessible: true,
     alternative_routes_available: true,
     alternative_routes: [
       {
-        route_id: 'B1',
-        route_name: 'Via Kadugannawa',
-        additional_distance_km: 12,
-        additional_time_minutes: 25
+        route_id: 'NH8',
+        route_name: 'Via Neemrana',
+        additional_distance_km: 15,
+        additional_time_minutes: 20
       }
     ],
     risk_level: 'low',
@@ -271,7 +271,7 @@ async function seedRouteStatus() {
     console.log('🗑️  Cleared existing route status data');
 
     // Insert seed data
-    const result = await RouteStatus.insertMany(sriLankaRoutes);
+    const result = await RouteStatus.insertMany(indianRoutes);
     console.log(`✅ Successfully seeded ${result.length} routes`);
 
     // Display summary

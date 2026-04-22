@@ -67,7 +67,7 @@ GET /api/resources?type=medical_supplies&status=available&location=6.9271,79.861
       "location": {
         "lat": 6.9271,
         "lng": 79.8612,
-        "address": "Colombo General Hospital",
+        "address": "Delhi General Hospital",
         "facility_name": "National Medical Warehouse"
       }
     }
@@ -528,7 +528,7 @@ To populate the database with sample resources for testing:
 node src/web-dashboard/backend/seeders/resource-seeder.js
 ```
 
-This will create sample resources including medical supplies, food, water, shelter materials, personnel, and transportation resources across different locations in Sri Lanka.
+This will create sample resources including medical supplies, food, water, shelter materials, personnel, and transportation resources across different locations in India.
 
 ---
 

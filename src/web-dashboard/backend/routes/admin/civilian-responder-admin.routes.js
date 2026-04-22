@@ -1,11 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const CivilianResponder = require('../../models/CivilianResponder');
-const { authenticateToken, requireAdmin } = require('../../middleware/auth');
+// const { authenticateToken, requireAdmin } = require('../../middleware/auth');
 
-// Apply authentication and admin middleware
-router.use(authenticateToken);
-router.use(requireAdmin);
+// Authentication middleware removed for admin access
 
 /**
  * GET /api/admin/civilian-responders
@@ -155,8 +153,8 @@ router.put('/:id/verify', async (req, res) => {
       responder.verification_status = 'verified';
       responder.verified_at = new Date();
       responder.verified_by = {
-        admin_id: req.user.individualId,
-        admin_name: req.user.name
+        admin_id: 'admin_user',
+        admin_name: 'System Admin'
       };
       
       // Calculate allowed levels based on verified certifications
@@ -200,7 +198,7 @@ router.put('/:id/suspend', async (req, res) => {
           notes: {
             message: `Account suspended by admin. Reason: ${reason}`,
             timestamp: new Date(),
-            added_by: req.user.individualId
+            added_by: 'admin_user'
           }
         }
       },

@@ -106,9 +106,8 @@ app.use((req, res, next) => {
   next();
 });
 
-// Import user & mobile routes
+// Import user routes
 const authRoutes = require('./routes/auth');
-const mobileAuthRoutes = require('./routes/mobileAuth.routes');
 const publicRoutes = require('./routes/public.routes');
 const mapRoutes = require('./routes/map.routes');
 const resourceRoutes = require('./routes/resources.routes');
@@ -142,10 +141,9 @@ const tokenRefreshRoutes = require('./routes/token-refresh.routes');
 // Import services
 const SosEscalationService = require('./services/sos-escalation.service');
 
-// Use user & mobile routes (with rate limiting for auth)
+// Use user routes (with rate limiting for auth)
 app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/auth', tokenRefreshRoutes); // Token refresh endpoints (no auth required - tokens are the auth)
-app.use('/api/mobile', authLimiter, mobileAuthRoutes);
 app.use('/api/citizen-auth', authLimiter, require('./routes/citizen-auth.routes')); // Citizen authentication
 app.use('/api/public', publicRoutes); // Public citizen routes - no auth required
 app.use('/api/map', mapRoutes);

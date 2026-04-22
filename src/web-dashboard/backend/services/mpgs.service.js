@@ -97,10 +97,10 @@ class MPGSService {
       if (billing) {
         requestData.billing = {
           address: {
-            city: billing.address?.city || 'Colombo',
-            country: billing.address?.country || 'LKA',
-            postcodeZip: billing.address?.postcodeZip || '10100',
-            stateProvince: billing.address?.stateProvince || 'Western'
+            city: billing.address?.city || 'New Delhi',
+            country: billing.address?.country || 'IND',
+            postcodeZip: billing.address?.postcodeZip || '110001',
+            stateProvince: billing.address?.stateProvince || 'Delhi'
           }
         };
       }

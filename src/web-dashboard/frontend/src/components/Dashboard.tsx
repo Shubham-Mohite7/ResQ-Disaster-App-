@@ -440,8 +440,8 @@ const Dashboard: React.FC = () => {
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Dashboard Overview</h1>
-            <p className="text-gray-600 mt-1">Comprehensive view of all system activities</p>
+            <h1 className="text-2xl font-bold text-gray-900">India Disaster Management Dashboard</h1>
+            <p className="text-gray-600 mt-1">Comprehensive view of disaster response activities across Indian states</p>
           </div>
           <div className="flex items-center space-x-4">
             <span className="text-sm text-gray-500">
@@ -458,15 +458,15 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Key Metrics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {/* Disaster Overview */}
-          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+          <div className="bg-white rounded-lg p-4 sm:p-6 shadow-sm border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Active Disasters</p>
-                <p className="text-2xl font-bold text-red-600">{stats.disasters.active}</p>
+                <p className="text-sm font-medium text-gray-600">Active Disasters in India</p>
+                <p className="text-xl sm:text-2xl font-bold text-red-600">{stats.disasters.active}</p>
                 <p className="text-xs text-gray-500 mt-1">
-                  {stats.disasters.critical} critical • {stats.disasters.total} total
+                  {stats.disasters.critical} critical • {stats.disasters.total} total across India
                 </p>
               </div>
               <MapPin className="w-8 h-8 text-red-500" />
@@ -474,10 +474,10 @@ const Dashboard: React.FC = () => {
           </div>
 
           {/* SOS Overview */}
-          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+          <div className="bg-white rounded-lg p-4 sm:p-6 shadow-sm border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">SOS Signals</p>
+                <p className="text-sm font-medium text-gray-600">India SOS Signals</p>
                 <p className="text-2xl font-bold text-orange-600">{stats.sos.total}</p>
                 <p className="text-xs text-gray-500 mt-1">
                   {stats.sos.pending} pending • {stats.sos.acknowledged} acknowledged • {stats.sos.responding} responding
@@ -488,10 +488,10 @@ const Dashboard: React.FC = () => {
           </div>
 
           {/* Reports Overview */}
-          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+          <div className="bg-white rounded-lg p-4 sm:p-6 shadow-sm border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Citizen Reports</p>
+                <p className="text-sm font-medium text-gray-600">India Citizen Reports</p>
                 <p className="text-2xl font-bold text-blue-600">{formatNumber(stats.reports.total)}</p>
                 <p className="text-xs text-gray-500 mt-1">
                   {stats.reports.pending} pending review
@@ -502,13 +502,13 @@ const Dashboard: React.FC = () => {
           </div>
 
           {/* Resource Overview */}
-          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+          <div className="bg-white rounded-lg p-4 sm:p-6 shadow-sm border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Resources</p>
+                <p className="text-sm font-medium text-gray-600">India Resources</p>
                 <p className="text-2xl font-bold text-blue-600">{stats.resources.available}</p>
                 <p className="text-xs text-gray-500 mt-1">
-                  {stats.resources.allocated} allocated • {stats.resources.total} total
+                  {stats.resources.allocated} allocated • {stats.resources.total} total across India
                 </p>
               </div>
               <Package className="w-8 h-8 text-blue-500" />
@@ -519,7 +519,7 @@ const Dashboard: React.FC = () => {
         {/* System Status Overview */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Quick Actions */}
-          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+          <div className="bg-white rounded-lg p-4 sm:p-6 shadow-sm border border-gray-200">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
             <div className="grid grid-cols-2 gap-3">
               {user?.role === 'admin' && (
@@ -560,7 +560,7 @@ const Dashboard: React.FC = () => {
           </div>
 
           {/* System Health */}
-          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+          <div className="bg-white rounded-lg p-4 sm:p-6 shadow-sm border border-gray-200">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">System Health</h3>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
@@ -653,7 +653,7 @@ const Dashboard: React.FC = () => {
         {/* Analytics Preview */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Disaster Analytics */}
-          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+          <div className="bg-white rounded-lg p-4 sm:p-6 shadow-sm border border-gray-200">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900">Disaster Analytics</h3>
               <BarChart3 className="w-5 h-5 text-gray-400" />
@@ -681,7 +681,7 @@ const Dashboard: React.FC = () => {
           </div>
 
           {/* SOS Analytics */}
-          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+          <div className="bg-white rounded-lg p-4 sm:p-6 shadow-sm border border-gray-200">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900">SOS Analytics</h3>
               <AlertTriangle className="w-5 h-5 text-gray-400" />
@@ -727,7 +727,7 @@ const Dashboard: React.FC = () => {
           </div>
 
           {/* Emergency Statistics */}
-          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+          <div className="bg-white rounded-lg p-4 sm:p-6 shadow-sm border border-gray-200">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900">Emergency Statistics</h3>
               <TrendingUp className="w-5 h-5 text-gray-400" />

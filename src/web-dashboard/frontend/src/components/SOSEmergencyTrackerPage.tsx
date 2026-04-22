@@ -35,7 +35,7 @@ const SOSEmergencyTrackerPage: React.FC = () => {
   const [allRequests, setAllRequests] = useState<SOSEmergencyRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
-  const [mapCenter, setMapCenter] = useState<[number, number]>([7.8731, 80.7718]); // Sri Lanka center
+  const [mapCenter, setMapCenter] = useState<[number, number]>([20.5937, 78.9629]); // India center
 
   // Filters
   const [districtFilter, setDistrictFilter] = useState('');
@@ -324,8 +324,9 @@ const SOSEmergencyTrackerPage: React.FC = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
             <div>
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">District</label>
+              <label htmlFor="district-filter-select" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">District</label>
               <select
+                id="district-filter-select"
                 value={districtFilter}
                 onChange={(e) => setDistrictFilter(e.target.value)}
                 className="w-full px-2 sm:px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -338,8 +339,9 @@ const SOSEmergencyTrackerPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Emergency Type</label>
+              <label htmlFor="emergency-type-filter-select" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Emergency Type</label>
               <select
+                id="emergency-type-filter-select"
                 value={emergencyTypeFilter}
                 onChange={(e) => setEmergencyTypeFilter(e.target.value)}
                 className="w-full px-2 sm:px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -352,8 +354,9 @@ const SOSEmergencyTrackerPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Priority</label>
+              <label htmlFor="priority-filter-select" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Priority</label>
               <select
+                id="priority-filter-select"
                 value={priorityFilter}
                 onChange={(e) => setPriorityFilter(e.target.value)}
                 className="w-full px-2 sm:px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -368,8 +371,9 @@ const SOSEmergencyTrackerPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Status</label>
+              <label htmlFor="status-filter-select" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Status</label>
               <select
+                id="status-filter-select"
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
                 className="w-full px-2 sm:px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"

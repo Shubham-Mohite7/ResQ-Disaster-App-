@@ -38,12 +38,12 @@ router.post('/signup', async (req, res) => {
       });
     }
 
-    // Validate phone format (Sri Lankan format)
-    const phoneRegex = /^(\+94|0)?[1-9]\d{8}$/;
+    // Validate phone format (Indian format)
+    const phoneRegex = /^(\+91|0)?[6-9]\d{9}$/;
     if (!phoneRegex.test(phone)) {
       return res.status(400).json({
         success: false,
-        message: 'Invalid phone number format. Use format: 0771234567 or +94771234567'
+        message: 'Invalid phone number format. Use format: 9876543210 or +919876543210'
       });
     }
 

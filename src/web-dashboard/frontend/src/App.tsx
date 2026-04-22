@@ -29,15 +29,17 @@ import CitizenSOSPage from './components/CitizenSOSPage';
 import CitizenReportPage from './components/CitizenReportPage';
 import CitizenChatPage from './components/CitizenChatPage';
 import CitizenMapPage from './components/CitizenMapPage';
+import CitizenAnalyticsPage from './components/CitizenAnalyticsPage';
 import ReliefTrackerPage from './components/ReliefTrackerPage';
 import SOSEmergencyTrackerPage from './components/SOSEmergencyTrackerPage';
 import SubmitSOSEmergencyPage from './components/SubmitSOSEmergencyPage';
 import EmergencyContactsPage from './components/EmergencyContactsPage';
 import VolunteerFormPage from './components/VolunteerFormPage';
-import LankaRouteWatchPage from './components/LankaRouteWatchPage';
+import IndiaRouteWatchPage from './components/IndiaRouteWatchPage';
 import ReportRoadIssuePage from './components/ReportRoadIssuePage';
 import EnhancedSafeRoutesPage from './components/EnhancedSafeRoutesPage';
 import EnhancedRouteMapPage from './components/EnhancedRouteMapPage';
+import LandingPage from './components/LandingPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import ErrorBoundary from './components/ErrorBoundary';
 
@@ -185,16 +187,19 @@ function App() {
               <Route path="/citizen/report" element={<CitizenReportPage />} />
               <Route path="/citizen/chat" element={<CitizenChatPage />} />
               <Route path="/citizen/map" element={<CitizenMapPage />} />
+              <Route path="/citizen/analytics" element={<CitizenAnalyticsPage />} />
               <Route path="/citizen/relief-tracker" element={<ReliefTrackerPage />} />
               <Route path="/citizen/sos-tracker" element={<SOSEmergencyTrackerPage />} />
               <Route path="/citizen/submit-sos" element={<SubmitSOSEmergencyPage />} />
               <Route path="/citizen/emergency-contacts" element={<EmergencyContactsPage />} />
               <Route path="/citizen/volunteer" element={<VolunteerFormPage />} />
-          <Route path="/citizen/route-watch" element={<LankaRouteWatchPage />} />
+          <Route path="/citizen/route-watch" element={<IndiaRouteWatchPage />} />
           <Route path="/citizen/report-road" element={<ReportRoadIssuePage />} />
           <Route path="/citizen/safe-routes" element={<EnhancedSafeRoutesPage />} />
-          <Route path="/citizen/route-map" element={<EnhancedRouteMapPage />} />              {/* Redirect root to citizen dashboard */}
-              <Route path="/" element={<Navigate to="/citizen" replace />} />
+          <Route path="/citizen/route-map" element={<EnhancedRouteMapPage />} />              {/* Landing page */}
+              <Route path="/" element={<LandingPage />} />
+              {/* Redirect root to citizen dashboard */}
+              <Route path="/citizen" element={<Navigate to="/citizen" replace />} />
               <Route path="*" element={<Navigate to="/citizen" replace />} />
             </Routes>
             <Toaster 

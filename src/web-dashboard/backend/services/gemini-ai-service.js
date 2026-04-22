@@ -76,7 +76,7 @@ ${lowStockResources.map(item => `
 
 Please provide:
 1. Critical reorder recommendations with quantities and urgency
-2. Seasonal demand predictions for Sri Lankan disaster patterns
+2. Seasonal demand predictions for Indian disaster patterns
 3. Strategic stockpile location recommendations
 4. Cost optimization suggestions
 5. Risk mitigation strategies for supply chain disruptions
@@ -98,7 +98,7 @@ Provide specific, actionable recommendations in JSON format.
   async predictDisasterResourceNeeds(weatherData, historicalDisasters, currentInventory) {
     try {
       const prompt = `
-As an AI disaster prediction expert for Sri Lanka, analyze the following data to predict future resource needs:
+As an AI disaster prediction expert for India, analyze the following data to predict future resource needs:
 
 WEATHER FORECAST:
 ${JSON.stringify(weatherData, null, 2)}
@@ -115,7 +115,7 @@ ${currentInventory.map(r => `
 - ${r.type}: ${r.total_available} available units
 `).join('')}
 
-Based on Sri Lankan monsoon patterns, geographic vulnerability, and historical data:
+Based on Indian monsoon patterns, geographic vulnerability, and historical data:
 1. Predict likely disaster scenarios in the next 30 days
 2. Estimate resource requirements for predicted scenarios
 3. Identify inventory gaps and pre-positioning recommendations

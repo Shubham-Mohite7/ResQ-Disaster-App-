@@ -62,12 +62,12 @@ const SimpleMap: React.FC = () => {
     <div className="h-full bg-gray-100 relative overflow-hidden">
       {/* Map Background Placeholder */}
       <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-green-50">
-        {/* Sri Lanka outline placeholder */}
+        {/* India outline placeholder */}
         <div className="absolute inset-4 bg-white rounded-lg shadow-lg border-2 border-gray-200">
           <div className="p-4">
             <div className="text-center text-gray-500 mb-4">
               <MapPin className="w-12 h-12 mx-auto mb-2 text-gray-400" />
-              <h3 className="text-lg font-semibold">Sri Lanka Disaster Risk Map</h3>
+              <h3 className="text-lg font-semibold">India Disaster Risk Map</h3>
               <p className="text-sm">Real-time monitoring system</p>
             </div>
 

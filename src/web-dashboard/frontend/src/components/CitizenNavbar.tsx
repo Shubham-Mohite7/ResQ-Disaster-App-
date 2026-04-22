@@ -21,7 +21,7 @@ const CitizenNavbar: React.FC = () => {
     { path: '/citizen/map', label: 'Map', icon: Map },
     { path: '/citizen/chat', label: 'AI Assistant', icon: MessageSquare },
     { path: '/citizen/volunteer', label: 'Volunteer', icon: Users },
-    { path: 'https://flood-support-analytics.vercel.app/', label: 'Analytics', icon: BarChart3, external: true },
+    { path: '/citizen/analytics', label: 'Analytics', icon: BarChart3 },
   ];
 
   useEffect(() => {
@@ -57,7 +57,7 @@ const CitizenNavbar: React.FC = () => {
             />
             <div>
               <h1 className="text-lg sm:text-xl font-bold">ResQ Hub</h1>
-              <p className="text-blue-100 text-[10px] sm:text-xs">Sri Lanka Emergency Response</p>
+              <p className="text-blue-100 text-[10px] sm:text-xs">India Emergency Response</p>
             </div>
           </div>
 

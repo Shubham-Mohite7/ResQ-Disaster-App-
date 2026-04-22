@@ -49,12 +49,16 @@ const CitizenSOSPage: React.FC = () => {
   const [batteryPercent, setBatteryPercent] = useState('');
   const [privacyConsent, setPrivacyConsent] = useState(false);
 
-  const districts = [
-    'Colombo', 'Gampaha', 'Kalutara', 'Kandy', 'Matale', 'Nuwara Eliya',
-    'Galle', 'Matara', 'Hambantota', 'Jaffna', 'Kilinochchi', 'Mannar',
-    'Vavuniya', 'Mullaitivu', 'Batticaloa', 'Ampara', 'Trincomalee',
-    'Kurunegala', 'Puttalam', 'Anuradhapura', 'Polonnaruwa', 'Badulla',
-    'Monaragala', 'Ratnapura', 'Kegalle'
+  const states = [
+    'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa',
+    'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala',
+    'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland',
+    'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura',
+    'Uttar Pradesh', 'Uttarakhand', 'West Bengal', 'Delhi', 'Mumbai', 'Kolkata', 'Chennai',
+    'Bengaluru', 'Hyderabad', 'Pune', 'Ahmedabad', 'Surat', 'Jaipur', 'Lucknow', 'Kanpur',
+    'Nagpur', 'Indore', 'Thane', 'Bhopal', 'Visakhapatnam', 'Pimpri-Chinchwad', 'Patna',
+    'Vadodara', 'Ghaziabad', 'Ludhiana', 'Agra', 'Nashik', 'Faridabad', 'Meerut',
+    'Rajkot', 'Kalyan-Dombivali', 'Vasai-Virar', 'Varanasi', 'Srinagar', 'Dhanbad', 'Jodhpur'
   ];
 
   useEffect(() => {
@@ -72,13 +76,13 @@ const CitizenSOSPage: React.FC = () => {
         },
         (error) => {
           console.error('Location error:', error);
-          // Default to Colombo
-          setLocation({ lat: 6.9271, lng: 79.8612 });
+          // Default to Delhi
+          setLocation({ lat: 28.6139, lng: 77.2090 });
           toast.error('Using default location. Please enable GPS for accurate location.');
         }
       );
     } else {
-      setLocation({ lat: 6.9271, lng: 79.8612 });
+      setLocation({ lat: 28.6139, lng: 77.2090 });
       toast.error('Geolocation not supported. Using default location.');
     }
   };
@@ -200,6 +204,7 @@ const CitizenSOSPage: React.FC = () => {
               <button
                 onClick={() => navigate('/citizen')}
                 className="p-2 hover:bg-red-700 rounded-lg transition-colors"
+                aria-label="Go back to citizen dashboard"
               >
                 <ArrowLeft className="h-6 w-6" />
               </button>
@@ -210,7 +215,7 @@ const CitizenSOSPage: React.FC = () => {
             </div>
             <img 
               src="/favicon.png" 
-              alt="Sri Lanka Disaster Response Platform" 
+              alt="India Disaster Response Platform" 
               className="h-12 w-12"
             />
           </div>
@@ -349,15 +354,17 @@ const CitizenSOSPage: React.FC = () => {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       disabled={sending || sent}
                     />
+                    <label htmlFor="district-select-sos" className="block text-sm font-medium text-gray-700 mb-2">District</label>
                     <select
+                      id="district-select-sos"
                       value={district}
                       onChange={(e) => setDistrict(e.target.value)}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       disabled={sending || sent}
                     >
                       <option value="">Select District</option>
-                      {districts.map((d) => (
-                        <option key={d} value={d}>{d}</option>
+                      {states.map((state) => (
+                        <option key={state} value={state}>{state}</option>
                       ))}
                     </select>
                   </div>
@@ -370,7 +377,9 @@ const CitizenSOSPage: React.FC = () => {
                     <h4 className="font-semibold text-gray-800">Emergency Details</h4>
                   </div>
                   <div className="space-y-3">
+                    <label htmlFor="emergency-type-select-sos" className="block text-sm font-medium text-gray-700 mb-2">Emergency Type</label>
                     <select
+                      id="emergency-type-select-sos"
                       value={emergencyType}
                       onChange={(e) => setEmergencyType(e.target.value)}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -446,7 +455,9 @@ const CitizenSOSPage: React.FC = () => {
                     <h4 className="font-semibold text-gray-800">Current Situation</h4>
                   </div>
                   <div className="space-y-3">
+                    <label htmlFor="water-level-select-sos" className="block text-sm font-medium text-gray-700 mb-2">Water Level (if flooded)</label>
                     <select
+                      id="water-level-select-sos"
                       value={waterLevel}
                       onChange={(e) => setWaterLevel(e.target.value)}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -467,7 +478,9 @@ const CitizenSOSPage: React.FC = () => {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       disabled={sending || sent}
                     />
+                    <label htmlFor="building-type-select-sos" className="block text-sm font-medium text-gray-700 mb-2">Building Type</label>
                     <select
+                      id="building-type-select-sos"
                       value={buildingType}
                       onChange={(e) => setBuildingType(e.target.value)}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"

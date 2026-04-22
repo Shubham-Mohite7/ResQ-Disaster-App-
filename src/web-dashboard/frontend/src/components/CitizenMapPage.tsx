@@ -7,8 +7,9 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { sriLankaFloodDataService, type WaterLevelReading } from '../services/sriLankaFloodDataService';
+import { indiaFloodDataService, type WaterLevelReading } from '../services/indiaFloodDataService';
 import { EnhancedMapCard } from './EnhancedMapCard';
+import { API_BASE_URL } from '../config/api';
 
 // Fix for default markers
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -163,9 +164,9 @@ const CitizenMapPage: React.FC = () => {
 
   const fetchFloodData = async () => {
     try {
-      // Use the official Sri Lanka Flood Data API (lk-flood-api.vercel.app)
-      const activeAlerts = await sriLankaFloodDataService.getActiveAlerts();
-      const stations = await sriLankaFloodDataService.getStations();
+      // Use the official India Flood Data API (lk-flood-api.vercel.app)
+      const activeAlerts = await indiaFloodDataService.getActiveAlerts();
+      const stations = await indiaFloodDataService.getStations();
       
       // Combine alerts with station location data
       const floods = activeAlerts.map((alert: WaterLevelReading) => {
@@ -187,7 +188,7 @@ const CitizenMapPage: React.FC = () => {
       }).filter(f => f.lat !== 0 && f.lng !== 0); // Filter out stations without location data
 
       setFloodData(floods);
-      console.log(`Loaded ${floods.length} real-time flood alerts from DMC (Sri Lanka Flood API)`);
+      console.log(`Loaded ${floods.length} real-time flood alerts from DMC (India Flood API)`);
     } catch (error) {
       console.error('Flood data fetch error:', error);
       // Fallback to local backend if API fails
@@ -272,7 +273,7 @@ const CitizenMapPage: React.FC = () => {
     try {
       // HYBRID DATA MODEL: Fetch MongoDB user incident reports
       const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/public/user-reports?limit=100`
+        `${API_BASE_URL}/api/public/user-reports?limit=100`
       );
       if (response.data.success) {
         setUserReports(response.data.data);
@@ -296,7 +297,7 @@ const CitizenMapPage: React.FC = () => {
         baseParams.append('sort', 'distance');
       }
 
-      const apiUrl = import.meta.env.VITE_PUBLIC_DATA_API_URL || 'https://api.floodsupport.org/default/sri-lanka-flood-relief-jm/v1.0';
+      const apiUrl = import.meta.env.VITE_PUBLIC_DATA_API_URL || 'https://api.floodsupport.org/default/india-flood-relief-jm/v1.0';
 
       // Import tokenManager dynamically
       const { default: tokenManager } = await import('../utils/tokenManager');
@@ -331,7 +332,7 @@ const CitizenMapPage: React.FC = () => {
 
       // Fetch MongoDB help requests (user incident reports)
       const mongoResponse = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/public/user-reports?status=pending&limit=100`
+        `${API_BASE_URL}/api/public/user-reports?status=pending&limit=100`
       ).catch(() => ({ data: { success: false, data: [] } }));
 
       // FloodSupport API response: { requests: [...], contributions: [...], meta: {...} }

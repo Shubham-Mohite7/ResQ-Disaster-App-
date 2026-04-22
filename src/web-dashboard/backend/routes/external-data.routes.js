@@ -50,8 +50,8 @@ router.get('/relief-data', async (req, res) => {
 // GET /api/external/emergency-requests - Get emergency help requests
 router.get('/emergency-requests', async (req, res) => {
   try {
-    const lat = req.query.lat ? parseFloat(req.query.lat) : 6.9271; // Default: Colombo
-    const lng = req.query.lng ? parseFloat(req.query.lng) : 79.8612;
+    const lat = req.query.lat ? parseFloat(req.query.lat) : 28.6139; // Default: New Delhi
+    const lng = req.query.lng ? parseFloat(req.query.lng) : 77.2090;
     const radius_km = req.query.radius_km ? parseInt(req.query.radius_km) : 30;
     
     const result = await externalDataService.getEmergencyRequests(lat, lng, radius_km);

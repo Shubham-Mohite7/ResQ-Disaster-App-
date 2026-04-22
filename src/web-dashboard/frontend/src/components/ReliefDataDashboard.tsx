@@ -16,7 +16,7 @@ export default function ReliefDataDashboard() {
   const [requests, setRequests] = useState<EmergencyRequest[]>([]);
   const [contributions, setContributions] = useState<Contribution[]>([]);
   const [loading, setLoading] = useState(false);
-  const [location, setLocation] = useState({ lat: 6.9271, lng: 79.8612 }); // Colombo default
+  const [location, setLocation] = useState({ lat: 28.7041, lng: 77.1025 }); // Delhi default
   const [radius, setRadius] = useState(50);
   const [campType, setCampType] = useState<'emergency' | 'temporary' | 'permanent'>('emergency');
 
@@ -95,37 +95,43 @@ export default function ReliefDataDashboard() {
         <div className="bg-white rounded-lg shadow p-4 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="latitude-input" className="block text-sm font-medium text-gray-700 mb-2">
                 Latitude (Center)
               </label>
               <input
+                id="latitude-input"
                 type="number"
                 value={location.lat}
                 onChange={(e) => setLocation({ ...location, lat: parseFloat(e.target.value) })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 step="0.0001"
+                placeholder="Enter latitude"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="longitude-input" className="block text-sm font-medium text-gray-700 mb-2">
                 Longitude (Center)
               </label>
               <input
+                id="longitude-input"
                 type="number"
                 value={location.lng}
                 onChange={(e) => setLocation({ ...location, lng: parseFloat(e.target.value) })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 step="0.0001"
+                placeholder="Enter longitude"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="radius-input" className="block text-sm font-medium text-gray-700 mb-2">
                 Radius (km)
               </label>
               <input
+                id="radius-input"
                 type="number"
                 value={radius}
                 onChange={(e) => setRadius(parseInt(e.target.value))}
+                placeholder="Enter radius in kilometers"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 min="1"
                 max="500"
@@ -190,10 +196,11 @@ export default function ReliefDataDashboard() {
                 {activeTab === 'camps' && (
                   <>
                     <div className="mb-4">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label htmlFor="camp-type-select" className="block text-sm font-medium text-gray-700 mb-2">
                         Camp Type
                       </label>
                       <select
+                        id="camp-type-select"
                         value={campType}
                         onChange={(e) =>
                           setCampType(e.target.value as 'emergency' | 'temporary' | 'permanent')

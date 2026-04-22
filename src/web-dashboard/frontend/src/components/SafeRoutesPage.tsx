@@ -108,7 +108,7 @@ const SafeRoutesPage: React.FC = () => {
 
     try {
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)},Sri Lanka&limit=5&addressdetails=1`,
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)},India&limit=5&addressdetails=1`,
         { 
           signal: controller.signal,
           headers: { 
@@ -329,7 +329,7 @@ const SafeRoutesPage: React.FC = () => {
             <Navigation className="h-8 w-8 mr-3" />
             <div>
               <h1 className="text-3xl font-bold">Check Road Conditions</h1>
-              <p className="text-green-100 mt-1">Search any location in Sri Lanka - like PickMe or Google Maps</p>
+              <p className="text-green-100 mt-1">Search any location in India - like PickMe or Google Maps</p>
             </div>
           </div>
         </div>

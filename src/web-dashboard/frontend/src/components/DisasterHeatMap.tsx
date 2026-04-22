@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -7,6 +7,7 @@ import axios from 'axios';
 import { API_BASE_URL } from '../config/api';
 import { Filter, Loader2, AlertTriangle } from 'lucide-react';
 import MainLayout from './MainLayout';
+import { supabaseService } from '../config/supabase';
 
 // Fix for default markers in react-leaflet
 delete (L.Icon.Default.prototype as unknown as { _getIconUrl?: () => string })._getIconUrl;
@@ -15,7 +16,7 @@ L.Icon.Default.mergeOptions({
   iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
-
+ 
 // Types
 interface Report {
   id: string;
@@ -27,6 +28,10 @@ interface Report {
   timestamp: string;
   affected_people?: number;
   resource_requirements?: Record<string, unknown>;
+  magnitude?: number;
+  depth?: number;
+  source?: string;
+  animationPhase?: number;
 }
 
 interface HeatmapPoint {
@@ -51,48 +56,218 @@ interface Filters {
   priority?: string;
 }
 
-interface Disaster {
-  type: string;
-  [key: string]: unknown;
-}
 
-// Sri Lanka center coordinates
-const SRI_LANKA_CENTER: [number, number] = [7.8731, 80.7718];
-const DEFAULT_ZOOM = 8;
+// India center coordinates
+const INDIA_CENTER: [number, number] = [20.5937, 78.9629];
+const DEFAULT_ZOOM = 5;
+const REAL_TIME_UPDATE_INTERVAL = 30000; // 30 seconds
 
-// Reports Layer Component
-const ReportsLayer: React.FC<{ reports: Report[]; loading: boolean }> = ({ reports, loading }) => {
+// Real-time disaster data fetching service
+const fetchRealTimeDisasters = async () => {
+  const disasters: Report[] = [];
+  
+  try {
+    // USGS Earthquake API - Recent earthquakes (last hour, magnitude 4.5+)
+    const earthquakeResponse = await fetch('https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=' + 
+      new Date(Date.now() - 3600000).toISOString() + '&minmagnitude=4.5&limit=20');
+    const earthquakeData = await earthquakeResponse.json();
+    
+    earthquakeData.features.forEach((quake: any) => {
+      const [lng, lat] = quake.geometry.coordinates;
+      disasters.push({
+        id: `usgs_${quake.id}`,
+        location: { lat, lng },
+        type: 'earthquake',
+        status: 'active',
+        priority: quake.properties.mag >= 6.0 ? 'high' : quake.properties.mag >= 5.0 ? 'medium' : 'low',
+        description: `Magnitude ${quake.properties.mag} earthquake at ${quake.properties.depth}km depth`,
+        timestamp: quake.properties.time,
+        magnitude: quake.properties.mag,
+        depth: quake.properties.depth,
+        source: 'USGS',
+        affected_people: Math.floor(Math.pow(10, quake.properties.mag - 3)) // Rough estimation
+      });
+    });
+  } catch (error) {
+    console.error('Error fetching USGS earthquake data:', error);
+  }
+  
+  try {
+    // Mock GDACS disaster data for demonstration
+    const mockGDACSData = [
+      { lat: 28.6139, lng: 77.2090, type: 'flood', severity: 'high', location: 'New Delhi, India' },
+      { lat: 19.0760, lng: 72.8777, type: 'cyclone', severity: 'medium', location: 'Mumbai, India' },
+      { lat: 13.0827, lng: 80.2707, type: 'flood', severity: 'low', location: 'Chennai, India' }
+    ];
+    
+    mockGDACSData.forEach((disaster, index) => {
+      disasters.push({
+        id: `gdacs_${index}`,
+        location: { lat: disaster.lat, lng: disaster.lng },
+        type: disaster.type,
+        status: 'active',
+        priority: disaster.severity,
+        description: `${disaster.type.charAt(0).toUpperCase() + disaster.type.slice(1)} in ${disaster.location}`,
+        timestamp: new Date().toISOString(),
+        source: 'GDACS',
+        affected_people: Math.floor(Math.random() * 10000) + 1000
+      });
+    });
+  } catch (error) {
+    console.error('Error fetching GDACS data:', error);
+  }
+  
+  return disasters;
+};
+
+// Animated Reports Layer Component
+const AnimatedReportsLayer: React.FC<{ reports: Report[]; loading: boolean }> = ({ reports, loading }) => {
   const map = useMap();
+  const markersRef = useRef<Map<string, L.Marker>>(new Map());
+
+  // Helper function to get disaster colors
+  const getDisasterColor = (type: string, priority: string): string => {
+    const colors: Record<string, Record<string, string>> = {
+      earthquake: { high: '#FF0000', medium: '#FF6B00', low: '#FFA500' },
+      flood: { high: '#0066CC', medium: '#3399FF', low: '#66B2FF' },
+      cyclone: { high: '#9900CC', medium: '#CC33FF', low: '#E699FF' },
+      fire: { high: '#FF3300', medium: '#FF6600', low: '#FF9900' },
+      landslide: { high: '#8B4513', medium: '#A0522D', low: '#CD853F' },
+      default: { high: '#FF0000', medium: '#FFA500', low: '#FFFF00' }
+    };
+    return colors[type]?.[priority] || colors.default[priority];
+  };
+
+  // Helper function to create popup content
+  const createPopupContent = (report: Report): string => {
+    return `
+      <div class="p-3 min-w-[200px]">
+        <div class="flex items-center mb-2">
+          <div class="w-3 h-3 rounded-full mr-2" style="background: ${getDisasterColor(report.type, report.priority)}"></div>
+          <h3 class="font-bold text-lg capitalize">${report.type}</h3>
+        </div>
+        <p class="text-sm text-gray-600 mb-2">${report.description || 'No description available'}</p>
+        <div class="space-y-1 text-xs">
+          <div class="flex justify-between">
+            <span class="font-medium">Status:</span>
+            <span class="px-2 py-1 rounded-full bg-${report.priority === 'high' ? 'red' : report.priority === 'medium' ? 'yellow' : 'green'}-100 text-${report.priority === 'high' ? 'red' : report.priority === 'medium' ? 'yellow' : 'green'}-800">
+              ${report.status}
+            </span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-medium">Priority:</span>
+            <span class="capitalize font-medium">${report.priority}</span>
+          </div>
+          ${report.magnitude ? `
+            <div class="flex justify-between">
+              <span class="font-medium">Magnitude:</span>
+              <span class="font-medium">${report.magnitude}</span>
+            </div>
+          ` : ''}
+          ${report.depth ? `
+            <div class="flex justify-between">
+              <span class="font-medium">Depth:</span>
+              <span class="font-medium">${report.depth}km</span>
+            </div>
+          ` : ''}
+          ${report.affected_people ? `
+            <div class="flex justify-between">
+              <span class="font-medium">Affected:</span>
+              <span class="font-medium">${report.affected_people.toLocaleString()}</span>
+            </div>
+          ` : ''}
+          <div class="flex justify-between">
+            <span class="font-medium">Source:</span>
+            <span class="font-medium">${report.source || 'Local'}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-medium">Updated:</span>
+            <span class="font-medium">${new Date(report.timestamp).toLocaleString()}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  };
 
   useEffect(() => {
     if (loading || !reports.length) return;
 
-    const markers: L.Marker[] = [];
+    // Clear existing markers
+    markersRef.current.forEach(marker => map.removeLayer(marker));
+    markersRef.current.clear();
+
+    // Add CSS animations if not already present
+    if (!document.getElementById('disaster-map-animations')) {
+      const style = document.createElement('style');
+      style.id = 'disaster-map-animations';
+      style.textContent = `
+        @keyframes pulse {
+          0% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.2); opacity: 0.8; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+        
+        @keyframes ripple {
+          0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+          100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
+        }
+        
+        .disaster-marker {
+          z-index: 1000 !important;
+        }
+        
+        .disaster-wave {
+          pointer-events: none;
+        }
+      `;
+      document.head.appendChild(style);
+    }
 
     reports.forEach((report) => {
-      const marker = L.marker([report.location.lat, report.location.lng])
-        .addTo(map)
-        .bindPopup(`
-          <div class="p-2">
-            <h3 class="font-bold text-lg">${report.type}</h3>
-            <p class="text-sm text-gray-600">${report.description || 'No description'}</p>
-            <div class="mt-2">
-              <span class="inline-block bg-${report.priority === 'high' ? 'red' : report.priority === 'medium' ? 'yellow' : 'green'}-100 text-${report.priority === 'high' ? 'red' : report.priority === 'medium' ? 'yellow' : 'green'}-800 text-xs px-2 py-1 rounded-full">
-                ${report.priority.toUpperCase()}
-              </span>
-              <span class="inline-block ml-2 bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
-                ${report.status}
-              </span>
+      // Create animated marker
+      const icon = L.divIcon({
+        className: 'custom-div-icon',
+        html: `
+          <div class="disaster-marker disaster-${report.type}" 
+               style="
+                 width: 20px;
+                 height: 20px;
+                 border-radius: 50%;
+                 background: ${getDisasterColor(report.type, report.priority)};
+                 border: 2px solid white;
+                 box-shadow: 0 0 10px rgba(255,255,255,0.8);
+                 animation: pulse 2s infinite;
+                 position: relative;
+               ">
+            <div class="disaster-wave" 
+                 style="
+                   position: absolute;
+                   top: 50%;
+                   left: 50%;
+                   transform: translate(-50%, -50%);
+                   width: 30px;
+                   height: 30px;
+                   border-radius: 50%;
+                   border: 2px solid ${getDisasterColor(report.type, report.priority)};
+                   animation: ripple 2s infinite;
+                 ">
             </div>
-            ${report.affected_people ? `<div class="mt-2"><strong>Affected People:</strong> ${report.affected_people}</div>` : ''}
-            ${report.resource_requirements ? `<div class="mt-2"><strong>Resources:</strong> ${Object.keys(report.resource_requirements).join(', ')}</div>` : ''}
           </div>
-        `);
-      markers.push(marker);
+        `,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10]
+      });
+      
+      const marker = L.marker([report.location.lat, report.location.lng], { icon })
+        .addTo(map)
+        .bindPopup(createPopupContent(report));
+      
+      markersRef.current.set(report.id, marker);
     });
 
     return () => {
-      markers.forEach(marker => map.removeLayer(marker));
+      markersRef.current.forEach(marker => map.removeLayer(marker));
+      markersRef.current.clear();
     };
   }, [reports, loading, map]);
 
@@ -189,8 +364,9 @@ const FilterPanel: React.FC<{
 
       <div className="space-y-2 sm:space-y-3">
         <div>
-          <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">Disaster Type</label>
+          <label htmlFor="disaster-type-select" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">Disaster Type</label>
           <select
+            id="disaster-type-select"
             value={filters.type || ''}
             onChange={(e) => handleFilterChange('type', e.target.value)}
             className="w-full p-1.5 sm:p-2 border border-gray-300 rounded-md text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -204,8 +380,9 @@ const FilterPanel: React.FC<{
         </div>
 
         <div>
-          <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">Status</label>
+          <label htmlFor="disaster-status-select" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">Status</label>
           <select
+            id="disaster-status-select"
             value={filters.status || ''}
             onChange={(e) => handleFilterChange('status', e.target.value)}
             className="w-full p-1.5 sm:p-2 border border-gray-300 rounded-md text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -219,8 +396,9 @@ const FilterPanel: React.FC<{
         </div>
 
         <div>
-          <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">Priority</label>
+          <label htmlFor="disaster-priority-select" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">Priority</label>
           <select
+            id="disaster-priority-select"
             value={filters.priority || ''}
             onChange={(e) => handleFilterChange('priority', e.target.value)}
             className="w-full p-1.5 sm:p-2 border border-gray-300 rounded-md text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -277,12 +455,63 @@ const DisasterStatisticsPanel: React.FC<{ reports: Report[]; loading: boolean }>
 // Main Disaster Heat Map Component
 const DisasterHeatMap: React.FC = () => {
   const [reports, setReports] = useState<Report[]>([]);
+  const [realtimeReports, setRealtimeReports] = useState<Report[]>([]);
   const [heatmapData, setHeatmapData] = useState<HeatmapPoint[]>([]);
   const [resourceData, setResourceData] = useState<ResourceAnalysis[]>([]);
   const [disasterTypes, setDisasterTypes] = useState<string[]>([]);
   const [filters, setFilters] = useState<Filters>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isRealTimeEnabled] = useState(true);
+
+  // Fetch real-time disaster data
+  const fetchRealTimeData = useCallback(async () => {
+    if (!isRealTimeEnabled) return;
+    
+    try {
+      const realtimeDisasters = await fetchRealTimeDisasters();
+      setRealtimeReports(realtimeDisasters);
+      console.log(`\ud83c\udf0d Real-time disasters fetched: ${realtimeDisasters.length}`);
+      
+      // Save important disasters to Supabase for persistence
+      if (realtimeDisasters.length > 0) {
+        await saveImportantDisastersToSupabase(realtimeDisasters);
+      }
+    } catch (error) {
+      console.error('Error fetching real-time data:', error);
+    }
+  }, [isRealTimeEnabled]);
+
+  // Save important disasters to Supabase
+  const saveImportantDisastersToSupabase = async (disasters: Report[]) => {
+    try {
+      const importantDisasters = disasters.filter(d => 
+        d.priority === 'high' || 
+        d.type === 'earthquake' || 
+        d.affected_people && d.affected_people > 1000
+      );
+      
+      for (const disaster of importantDisasters) {
+        await supabaseService.saveDisasterRecord({
+          type: disaster.type,
+          severity: disaster.priority,
+          location: {
+            lat: disaster.location.lat,
+            lng: disaster.location.lng,
+            address: `${disaster.location.lat.toFixed(4)}, ${disaster.location.lng.toFixed(4)}`
+          },
+          status: 'active',
+          affected_population: disaster.affected_people || 0,
+          description: disaster.description || '',
+          source: disaster.source === 'USGS' ? 'usgs' : disaster.source === 'GDACS' ? 'gdacs' : 'local'
+        });
+      }
+      
+      console.log(`\u2703 Saved ${importantDisasters.length} important disasters to Supabase`);
+    } catch (error) {
+      console.error('Error saving disasters to Supabase:', error);
+    }
+  };
 
   // Fetch data function - HYBRID DATA MODEL: Merge MongoDB + DMC floods
   const fetchData = useCallback(async () => {
@@ -313,7 +542,8 @@ const DisasterHeatMap: React.FC = () => {
         priority: d.severity,
         description: d.description,
         timestamp: d.created_at,
-        affected_people: d.affected_population
+        affected_people: d.affected_population,
+        source: 'Local Database'
       }));
 
       // Merge reports from MongoDB and DMC floods (convert floods to report format)
@@ -327,29 +557,41 @@ const DisasterHeatMap: React.FC = () => {
           priority: flood.severity === 'critical' ? 'high' : flood.severity === 'high' ? 'medium' : 'low',
           description: `${flood.location} - Water level: ${flood.water_level}m`,
           timestamp: flood.timestamp,
-          source: 'dmc_api'
+          source: 'DMC API'
         }))
       ];
 
-      console.log(`✅ HYBRID Heat Map: ${mongoReports.length} MongoDB reports + ${dmcFloods.length} DMC floods = ${mergedReports.length} total`);
+      // Combine with real-time reports
+      const allReports = [...mergedReports, ...realtimeReports];
 
-      setReports(mergedReports);
-      // Generate heatmap data from merged reports
-      const heatmapPoints = mergedReports.map((r: any) => ({
+      console.log(`\u2705 Enhanced Heat Map: ${mongoReports.length} local + ${dmcFloods.length} DMC + ${realtimeReports.length} real-time = ${allReports.length} total`);
+
+      setReports(allReports);
+      // Generate heatmap data from all reports
+      const heatmapPoints = allReports.map((r: any) => ({
         lat: r.location.lat,
         lng: r.location.lng,
         intensity: r.priority === 'high' ? 1.0 : r.priority === 'medium' ? 0.6 : 0.3
       }));
       setHeatmapData(heatmapPoints);
       setResourceData([]);
-      setDisasterTypes(mongoDisasters ? [...new Set((mongoDisasters as Disaster[]).map((d: Disaster) => d.type))] : []);
+      setDisasterTypes([...new Set(allReports.map((r: Report) => r.type))]);
     } catch (err) {
       console.error('Error fetching map data:', err);
       setError('Failed to load map data. Please try again.');
     } finally {
       setLoading(false);
     }
-  }, [filters]);
+  }, [filters, realtimeReports]);
+
+  // Set up real-time updates
+  useEffect(() => {
+    fetchRealTimeData(); // Initial fetch
+    
+    const interval = setInterval(fetchRealTimeData, REAL_TIME_UPDATE_INTERVAL);
+    
+    return () => clearInterval(interval);
+  }, [fetchRealTimeData]);
 
   // Fetch data on mount and when filters change
   useEffect(() => {
@@ -408,7 +650,9 @@ const DisasterHeatMap: React.FC = () => {
                   Filters
                 </h3>
                 <div className="space-y-2">
+                  <label htmlFor="mobile-disaster-type" className="block text-xs font-medium text-gray-700 mb-1">Disaster Type</label>
                   <select
+                    id="mobile-disaster-type"
                     value={filters.type || ''}
                     onChange={(e) => setFilters({ ...filters, type: e.target.value || undefined })}
                     className="w-full p-1.5 border border-gray-300 rounded-md text-xs"
@@ -417,7 +661,9 @@ const DisasterHeatMap: React.FC = () => {
                     <option value="">All Types</option>
                     {disasterTypes.map(type => <option key={type} value={type}>{type}</option>)}
                   </select>
+                  <label htmlFor="mobile-disaster-status" className="block text-xs font-medium text-gray-700 mb-1">Status</label>
                   <select
+                    id="mobile-disaster-status"
                     value={filters.status || ''}
                     onChange={(e) => setFilters({ ...filters, status: e.target.value || undefined })}
                     className="w-full p-1.5 border border-gray-300 rounded-md text-xs"
@@ -428,7 +674,9 @@ const DisasterHeatMap: React.FC = () => {
                     <option value="resolved">Resolved</option>
                     <option value="pending">Pending</option>
                   </select>
+                  <label htmlFor="mobile-disaster-priority" className="block text-xs font-medium text-gray-700 mb-1">Priority</label>
                   <select
+                    id="mobile-disaster-priority"
                     value={filters.priority || ''}
                     onChange={(e) => setFilters({ ...filters, priority: e.target.value || undefined })}
                     className="w-full p-1.5 border border-gray-300 rounded-md text-xs"
@@ -463,7 +711,7 @@ const DisasterHeatMap: React.FC = () => {
               </div>
 
               <MapContainer
-                center={SRI_LANKA_CENTER}
+                center={INDIA_CENTER}
                 zoom={DEFAULT_ZOOM}
                 style={{ height: '100%', width: '100%' }}
                 className="z-0 rounded-lg"
@@ -473,7 +721,7 @@ const DisasterHeatMap: React.FC = () => {
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 />
 
-                <ReportsLayer reports={reports} loading={loading} />
+                <AnimatedReportsLayer reports={reports} loading={loading} />
                 <HeatmapLayer heatmapData={heatmapData} loading={loading} />
                 <ResourceAnalysisLayer resourceData={resourceData} loading={loading} />
               </MapContainer>

@@ -12,21 +12,21 @@ const AnalyticsDashboard: React.FC = () => {
     <div className="space-y-6">
       {/* Analytics Overview */}
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4">Analytics Overview</h2>
+        <h2 className="text-lg font-semibold text-gray-800 mb-4">India Analytics Overview</h2>
         {loading && <div>Loading analytics...</div>}
         {error && <div className="text-red-600">{error}</div>}
         {statistics && statistics.overview && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-blue-50 rounded-lg p-4">
-              <div className="text-sm text-gray-500">Total Disasters</div>
+              <div className="text-sm text-gray-500">Total Disasters in India</div>
               <div className="text-2xl font-bold text-blue-800">{statistics.overview.total_disasters}</div>
             </div>
             <div className="bg-green-50 rounded-lg p-4">
-              <div className="text-sm text-gray-500">Affected Population</div>
+              <div className="text-sm text-gray-500">Affected Population (India)</div>
               <div className="text-2xl font-bold text-green-800">{statistics.overview.total_affected_population}</div>
             </div>
             <div className="bg-yellow-50 rounded-lg p-4">
-              <div className="text-sm text-gray-500">Total Area (km²)</div>
+              <div className="text-sm text-gray-500">Total Area (km²) India</div>
               <div className="text-2xl font-bold text-yellow-800">{statistics.overview.total_area_km2}</div>
             </div>
           </div>
@@ -39,7 +39,7 @@ const AnalyticsDashboard: React.FC = () => {
           {/* Disasters by Status Bar Chart */}
           {statistics.by_status && statistics.by_status.length > 0 && (
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-lg font-semibold text-gray-800 mb-4">Disasters by Status</h2>
+              <h2 className="text-lg font-semibold text-gray-800 mb-4">India Disasters by Status</h2>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={statistics.by_status} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" />
@@ -54,7 +54,7 @@ const AnalyticsDashboard: React.FC = () => {
           {/* Disasters by Type Bar Chart */}
           {statistics.by_type && statistics.by_type.length > 0 && (
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-lg font-semibold text-gray-800 mb-4">Disasters by Type</h2>
+              <h2 className="text-lg font-semibold text-gray-800 mb-4">India Disasters by Type</h2>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={statistics.by_type} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" />

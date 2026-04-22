@@ -1,7 +1,7 @@
 # 🚨 ResQ - National Disaster Response Platform
 
 [![Production Status](https://img.shields.io/badge/status-production%20deployed-brightgreen)](https://resq-five.vercel.app)
-[![Built For](https://img.shields.io/badge/built%20for-Sri%20Lanka-red)](https://www.dmc.gov.lk)
+[![Built For](https://img.shields.io/badge/built%20for-India-orange)](https://www.ndma.gov.in)
 
 **ResQ Hub — Version 1.1** (Released: 2025-12-05)
 
@@ -13,7 +13,7 @@
 - Updated documentation and changelog entries for v1.1.
 
 
-ResQ (Rescue) is a production disaster-response platform for Sri Lanka — live flood monitoring, SOS reporting, relief coordination and admin dashboards. This repository contains the web frontend, mobile app, and backend services.
+ResQ (Rescue) is a production disaster-response platform for India — live flood monitoring, SOS reporting, relief coordination and admin dashboards. This repository contains the web frontend, mobile app, and backend services.
 
 Live deployment (primary):
 - Frontend: https://resq-five.vercel.app
@@ -49,10 +49,10 @@ Support / Contact
 ----
 
 For more details (architecture, API docs, deployment), see the `docs/` folder.
-- 🌊 **Live Flood Monitoring** - Real-time water levels from 39 DMC gauging stations
-  - 15-minute update intervals
+- 🌊 **Live Flood Monitoring** - Real-time water levels from CWC (Central Water Commission) gauging stations
+  - 30-minute update intervals
   - Water level trends (Rising/Falling)
-  - Alert status: MAJOR, MINOR, ALERT, NORMAL
+  - Alert status: EXTREME, SEVERE, MODERATE, NORMAL
   - Rainfall data and timestamps
   
 - 🗺️ **Interactive Risk Map** - Leaflet-powered disaster visualization
@@ -83,13 +83,13 @@ For more details (architecture, API docs, deployment), see the `docs/` folder.
   - Set urgency level
   - Submitted to Supabase Relief API
 
-- 📞 **Emergency Contacts** - District-specific DDMCU hotlines
-  - 4 main emergency services (Fire, Police, Ambulance, Disaster)
-  - District-specific contacts with direct call buttons
+- 📞 **Emergency Contacts** - District-specific NDMA/SDMA hotlines
+  - 4 main emergency services (Fire, Police, Ambulance, Disaster Management)
+  - State and district-specific contacts with direct call buttons
   - Automatic district detection from user location
 
 #### Navigation & Safety
-- 🛣️ **LankaRouteWatch** - Safe route planning
+- 🛣️ **IndiaRouteWatch** - Safe route planning
   - Location search with Nominatim autocomplete
   - Replace district dropdowns with address search
   - Road hazard reports with distances
@@ -161,13 +161,13 @@ For more details (architecture, API docs, deployment), see the `docs/` folder.
   - Batch operations
 
 #### Disaster Operations
-- 🗺️ **Live Disaster Heat Map** - Real-time DMC flood visualization
-  - 39 gauging station markers
+- 🗺️ **Live Disaster Heat Map** - Real-time CWC flood visualization
+  - CWC gauging station markers across major river basins
   - Color-coded alert status
   - Water level display
   - Rising/Falling indicators
   - Interactive popups
-  - Auto-refresh every 5 minutes
+  - Auto-refresh every 10 minutes
   
 - 🔥 **Disaster Management** - Create and track events
   - Disaster type selection (Flood, Landslide, Fire, etc.)
@@ -399,25 +399,25 @@ The platform implements a sophisticated dual authentication system to handle dif
 
 ## 📚 API Documentation
 
-### DMC Flood Data API
-- **Base URL**: `https://lk-flood-api.vercel.app`
-- **Documentation**: [Swagger UI](https://lk-flood-api.vercel.app/docs) | [ReDoc](https://lk-flood-api.vercel.app/redoc)
-- **Full Docs**: [docs/sriLankaFloodDataAPI.md](./docs/sriLankaFloodDataAPI.md)
+### CWC Flood Data API
+- **Base URL**: `https://cwc.gov.in/`
+- **Documentation**: [CWC Official Portal](https://cwc.gov.in/)
+- **Full Docs**: [docs/indiaFloodDataAPI.md](./docs/indiaFloodDataAPI.md)
 
 **Key Endpoints**:
-- `GET /alerts` - Active flood alerts (MAJOR, MINOR, ALERT)
-- `GET /levels/latest` - Latest water levels for all 39 stations
+- `GET /alerts` - Active flood alerts (EXTREME, SEVERE, MODERATE)
+- `GET /levels/latest` - Latest water levels for all CWC stations
 - `GET /stations` - Station metadata with GPS coordinates
 - `GET /rivers` - River information with basin data
 
 **Example Response** (`/alerts`):
 ```json
 {
-  "station_name": "Hanwella",
-  "river_name": "Kelani Ganga",
-  "water_level": 10.75,
-  "alert_status": "MAJOR",
-  "rising_or_falling": "Falling",
+  "station_name": "Patna",
+  "river_name": "Ganga",
+  "water_level": 52.45,
+  "alert_status": "SEVERE",
+  "rising_or_falling": "Rising",
   "timestamp": "2025-11-30 12:30:00"
 }
 ```
@@ -855,7 +855,7 @@ After deployment, verify these features:
 - **[PRODUCTION_FIX_SUMMARY.md](./PRODUCTION_FIX_SUMMARY.md)** - Production error fixes and solutions
 
 ### API Documentation
-- **[DMC Flood Data API](./docs/sriLankaFloodDataAPI.md)** - Real-time flood monitoring (39 stations)
+- **[CWC Flood Data API](./docs/indiaFloodDataAPI.md)** - Real-time flood monitoring (CWC stations)
 - **[Supabase Relief API](./docs/publicDataAPI.md)** - Relief camp coordination and volunteer management
 - **[Backend API Endpoints](./docs/api.md)** - Internal API documentation (if available)
 
@@ -920,14 +920,14 @@ This project is developed for Codefest's Revive Nation hackathon and is intended
 ## 🎯 Known Limitations & Future Enhancements
 
 ### Current Limitations
-- ⚠️ **Mock Authentication** - Uses Individual ID + OTP instead of real SLUDI
+- ⚠️ **Mock Authentication** - Uses Individual ID + OTP instead of real Aadhaar/DigiLocker
 - ⚠️ **Supabase Dependency** - Relief camps may be unavailable if external API down
-- ⚠️ **Single Language** - Currently English only (Sinhala/Tamil planned)
+- ⚠️ **Single Language** - Currently English only (Hindi/Tamil planned)
 - ⚠️ **No Real-Time Sync** - Dashboard updates on refresh (WebSocket planned)
 
 ### Planned Features
-- 🔮 **Real SLUDI Integration** - Connect to actual eSignet authentication
-- 🔮 **Multi-Language Support** - Sinhala, Tamil, English
+- 🔮 **Real Aadhaar Integration** - Connect to actual DigiLocker authentication
+- 🔮 **Multi-Language Support** - Hindi, Tamil, English
 - 🔮 **Push Notifications** - Real-time alerts to mobile devices
 - 🔮 **Offline Mode** - Service worker for offline access
 - 🔮 **WebSocket Integration** - Live dashboard updates

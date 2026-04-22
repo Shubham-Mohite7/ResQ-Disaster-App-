@@ -69,14 +69,14 @@ const CitizenDashboard: React.FC = () => {
         },
         (error) => {
           console.error('Location error:', error);
-          // Default to Colombo, Sri Lanka
-          setLocation({ lat: 6.9271, lng: 79.8612 });
-          setLocationName('Colombo, Sri Lanka (Default)');
+          // Default to New Delhi, India
+          setLocation({ lat: 28.6139, lng: 77.2090 });
+          setLocationName('New Delhi, India (Default)');
         }
       );
     } else {
-      setLocation({ lat: 6.9271, lng: 79.8612 });
-      setLocationName('Colombo, Sri Lanka (Default)');
+      setLocation({ lat: 28.6139, lng: 77.2090 });
+      setLocationName('New Delhi, India (Default)');
     }
   };
 
@@ -130,7 +130,7 @@ const CitizenDashboard: React.FC = () => {
             // Parse display_name
             const parts = data.display_name.split(',').map((p: string) => p.trim());
             const meaningfulParts = parts.filter((p: string) => 
-              p && !p.match(/^\d+$/) && p !== 'Sri Lanka'
+              p && !p.match(/^\d+$/) && p !== 'India'
             ).slice(0, 3);
             finalLocation = meaningfulParts.join(', ');
           }
@@ -180,7 +180,7 @@ const CitizenDashboard: React.FC = () => {
         } else {
           const parts = response.data.data.display_name.split(',').map((p: string) => p.trim());
           const meaningfulParts = parts.filter((p: string) => 
-            p && !p.match(/^\d+$/) && p !== 'Sri Lanka'
+            p && !p.match(/^\d+$/) && p !== 'India'
           ).slice(0, 3);
           finalLocation = meaningfulParts.join(', ');
         }
@@ -294,7 +294,7 @@ const CitizenDashboard: React.FC = () => {
                 NEW
               </div>
               <Navigation className="h-5 w-5 md:h-12 md:w-12 mb-1 md:mb-3" />
-              <h3 className="text-[9px] md:text-xl font-bold leading-tight text-center">LankaRoute</h3>
+              <h3 className="text-[9px] md:text-xl font-bold leading-tight text-center">IndiaRoute</h3>
               <p className="text-[10px] md:text-sm text-blue-100 mt-0.5 md:mt-1 hidden md:block">Road conditions & safe routes</p>
             </button>
 
@@ -603,38 +603,38 @@ const CitizenDashboard: React.FC = () => {
         <div className="mt-8 bg-gradient-to-r from-red-50 to-orange-50 rounded-xl shadow-md p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-xl font-bold text-gray-800">General Emergency Numbers</h3>
-            <span className="text-xs font-semibold text-gray-600">🇱🇰 Sri Lanka</span>
+            <span className="text-xs font-semibold text-gray-600">�� India</span>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <a
-              href="tel:117"
+              href="tel:112"
               className="bg-white hover:bg-red-50 rounded-lg p-4 transition-all transform hover:scale-105 cursor-pointer shadow-sm border-2 border-transparent hover:border-red-200"
             >
               <div className="text-center">
                 <p className="text-3xl mb-2">🚨</p>
-                <p className="text-2xl font-bold text-red-600 mb-1">117</p>
+                <p className="text-2xl font-bold text-red-600 mb-1">112</p>
                 <p className="text-sm font-semibold text-gray-800">Emergency</p>
                 <p className="text-xs text-gray-500 mt-1">Tap to call</p>
               </div>
             </a>
             <a
-              href="tel:119"
+              href="tel:100"
               className="bg-white hover:bg-blue-50 rounded-lg p-4 transition-all transform hover:scale-105 cursor-pointer shadow-sm border-2 border-transparent hover:border-blue-200"
             >
               <div className="text-center">
                 <p className="text-3xl mb-2">👮</p>
-                <p className="text-2xl font-bold text-blue-600 mb-1">119</p>
+                <p className="text-2xl font-bold text-blue-600 mb-1">100</p>
                 <p className="text-sm font-semibold text-gray-800">Police</p>
                 <p className="text-xs text-gray-500 mt-1">Tap to call</p>
               </div>
             </a>
             <a
-              href="tel:110"
+              href="tel:101"
               className="bg-white hover:bg-orange-50 rounded-lg p-4 transition-all transform hover:scale-105 cursor-pointer shadow-sm border-2 border-transparent hover:border-orange-200"
             >
               <div className="text-center">
                 <p className="text-3xl mb-2">🚒</p>
-                <p className="text-2xl font-bold text-orange-600 mb-1">110</p>
+                <p className="text-2xl font-bold text-orange-600 mb-1">101</p>
                 <p className="text-sm font-semibold text-gray-800">Fire Brigade</p>
                 <p className="text-xs text-gray-500 mt-1">Tap to call</p>
               </div>

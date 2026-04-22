@@ -72,7 +72,7 @@ const RouteMapPage: React.FC = () => {
   const navigate = useNavigate();
   const [reports, setReports] = useState<RoadReport[]>([]);
   const [loading, setLoading] = useState(true);
-  const [mapCenter] = useState<[number, number]>([7.8731, 80.7718]); // Center of Sri Lanka
+  const [mapCenter] = useState<[number, number]>([20.5937, 78.9629]); // Center of India
 
   useEffect(() => {
     fetchReports();
@@ -173,7 +173,7 @@ const RouteMapPage: React.FC = () => {
               <MapPin className="h-8 w-8 mr-3" />
               <div>
                 <h1 className="text-3xl font-bold">Interactive Road Status Map</h1>
-                <p className="text-blue-100 mt-1">Crowdsourced road conditions across Sri Lanka</p>
+                <p className="text-blue-100 mt-1">Crowdsourced road conditions across India</p>
               </div>
             </div>
             <div className="hidden md:flex items-center space-x-2 bg-blue-800 bg-opacity-50 px-4 py-2 rounded-lg">

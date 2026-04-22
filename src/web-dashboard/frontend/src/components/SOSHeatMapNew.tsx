@@ -41,8 +41,8 @@ interface Filters {
   emergency_type?: string;
 }
 
-// Sri Lanka center coordinates
-const SRI_LANKA_CENTER: [number, number] = [7.8731, 80.7718];
+// India center coordinates
+const INDIA_CENTER: [number, number] = [20.5937, 78.9629];
 const DEFAULT_ZOOM = 8;
 
 // Filter Panel Component
@@ -64,8 +64,9 @@ const FilterPanel: React.FC<{
 
       <div className="space-y-3">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+          <label htmlFor="status-filter-sos" className="block text-sm font-medium text-gray-700 mb-1">Status</label>
           <select
+            id="status-filter-sos"
             value={filters.status || ''}
             onChange={(e) => handleFilterChange('status', e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -81,8 +82,9 @@ const FilterPanel: React.FC<{
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+          <label htmlFor="priority-filter-sos" className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
           <select
+            id="priority-filter-sos"
             value={filters.priority || ''}
             onChange={(e) => handleFilterChange('priority', e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -97,8 +99,9 @@ const FilterPanel: React.FC<{
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Emergency Type</label>
+          <label htmlFor="emergency-type-filter-sos" className="block text-sm font-medium text-gray-700 mb-1">Emergency Type</label>
           <select
+            id="emergency-type-filter-sos"
             value={filters.emergency_type || ''}
             onChange={(e) => handleFilterChange('emergency_type', e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -204,6 +207,7 @@ const SOSHeatMap: React.FC = () => {
   const [sosSignals, setSosSignals] = useState<SosSignal[]>([]);
   const [sosLoading, setSosLoading] = useState(true);
   const [filters, setFilters] = useState<Filters>({});
+  const [mapCenter, setMapCenter] = useState<[number, number]>(INDIA_CENTER);
 
   // Fetch SOS data function
   const fetchSosData = useCallback(async () => {
@@ -301,7 +305,7 @@ const SOSHeatMap: React.FC = () => {
             </div>
 
             <MapContainer
-              center={SRI_LANKA_CENTER}
+              center={INDIA_CENTER}
               zoom={DEFAULT_ZOOM}
               style={{ height: '100%', width: '100%' }}
               className="z-0 rounded-lg"

@@ -35,7 +35,7 @@ const VolunteerFormPage: React.FC = () => {
           });
         },
         () => {
-          setUserLocation({ lat: 6.9271, lng: 79.8612 }); // Default to Colombo
+          setUserLocation({ lat: 28.6139, lng: 77.2090 }); // Default to Delhi
         }
       );
     }
@@ -107,6 +107,7 @@ const VolunteerFormPage: React.FC = () => {
               <button
                 onClick={() => navigate('/citizen/relief-tracker')}
                 className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                aria-label="Go back to relief tracker"
               >
                 <ArrowLeft className="h-6 w-6" />
               </button>
@@ -149,68 +150,76 @@ const VolunteerFormPage: React.FC = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="full-name-input" className="block text-sm font-medium text-gray-700 mb-2">
                     Full Name <span className="text-red-500">*</span>
                   </label>
                   <input
+                    id="full-name-input"
                     type="text"
                     required
                     value={formData.full_name}
                     onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    placeholder="Enter your full name"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="mobile-input" className="block text-sm font-medium text-gray-700 mb-2">
                     Mobile Number <span className="text-red-500">*</span>
                   </label>
                   <input
+                    id="mobile-input"
                     type="tel"
                     required
                     value={formData.mobile_number}
                     onChange={(e) => setFormData({ ...formData, mobile_number: e.target.value })}
-                    placeholder="+94771234567"
+                    placeholder="+917712345678"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="alternate-mobile-input" className="block text-sm font-medium text-gray-700 mb-2">
                     Alternate Mobile Number
                   </label>
                   <input
+                    id="alternate-mobile-input"
                     type="tel"
                     value={formData.mobile_number_2}
                     onChange={(e) => setFormData({ ...formData, mobile_number_2: e.target.value })}
-                    placeholder="+94771234567"
+                    placeholder="+917712345678"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="email-input" className="block text-sm font-medium text-gray-700 mb-2">
                     Email Address
                   </label>
                   <input
+                    id="email-input"
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    placeholder="Enter your email address"
                   />
                 </div>
               </div>
 
               <div className="mt-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="address-textarea" className="block text-sm font-medium text-gray-700 mb-2">
                   Address <span className="text-red-500">*</span>
                 </label>
                 <textarea
+                  id="address-textarea"
                   required
                   value={formData.address}
                   onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                   rows={2}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  placeholder="Enter your full address"
                 />
               </div>
             </div>
@@ -305,16 +314,18 @@ const VolunteerFormPage: React.FC = () => {
               </h2>
 
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="coverage-radius-input" className="block text-sm font-medium text-gray-700 mb-2">
                   Coverage Radius: {formData.coverage_radius_km} km
                 </label>
                 <input
+                  id="coverage-radius-input"
                   type="range"
                   min="5"
                   max="200"
                   value={formData.coverage_radius_km}
                   onChange={(e) => setFormData({ ...formData, coverage_radius_km: e.target.value })}
                   className="w-full"
+                  aria-label="Select coverage radius in kilometers"
                 />
                 <p className="text-xs text-gray-500 mt-1">
                   How far are you willing to travel to provide assistance?

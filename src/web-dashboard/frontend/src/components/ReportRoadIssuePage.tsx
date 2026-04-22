@@ -31,12 +31,16 @@ const ReportRoadIssuePage: React.FC = () => {
     casualties_count: 0
   });
 
-  const SRI_LANKA_DISTRICTS = [
-    'Colombo', 'Gampaha', 'Kalutara', 'Kandy', 'Matale', 'Nuwara Eliya',
-    'Galle', 'Matara', 'Hambantota', 'Jaffna', 'Kilinochchi', 'Mannar',
-    'Vavuniya', 'Mullaitivu', 'Batticaloa', 'Ampara', 'Trincomalee',
-    'Kurunegala', 'Puttalam', 'Anuradhapura', 'Polonnaruwa', 'Badulla',
-    'Moneragala', 'Ratnapura', 'Kegalle'
+  const INDIAN_STATES = [
+    'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa',
+    'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala',
+    'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland',
+    'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura',
+    'Uttar Pradesh', 'Uttarakhand', 'West Bengal', 'Delhi', 'Mumbai', 'Kolkata', 'Chennai',
+    'Bengaluru', 'Hyderabad', 'Pune', 'Ahmedabad', 'Surat', 'Jaipur', 'Lucknow', 'Kanpur',
+    'Nagpur', 'Indore', 'Thane', 'Bhopal', 'Visakhapatnam', 'Pimpri-Chinchwad', 'Patna',
+    'Vadodara', 'Ghaziabad', 'Ludhiana', 'Agra', 'Nashik', 'Faridabad', 'Meerut',
+    'Rajkot', 'Kalyan-Dombivali', 'Vasai-Virar', 'Varanasi', 'Srinagar', 'Dhanbad', 'Jodhpur'
   ];
 
   useEffect(() => {
@@ -165,7 +169,7 @@ const ReportRoadIssuePage: React.FC = () => {
           className="flex items-center text-blue-600 hover:text-blue-800 mb-6 transition-colors"
         >
           <ArrowLeft className="h-5 w-5 mr-2" />
-          Back to LankaRouteWatch
+          Back to IndiaRouteWatch
         </button>
 
         {/* Current Location Display */}
@@ -244,41 +248,43 @@ const ReportRoadIssuePage: React.FC = () => {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="road-name" className="block text-sm font-medium text-gray-700 mb-2">
                   Road Name <span className="text-red-600">*</span>
                 </label>
                 <input
+                  id="road-name"
                   type="text"
                   name="road_name"
                   value={formData.road_name}
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g., Galle Road, A1 Highway"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  District <span className="text-red-600">*</span>
+                <label htmlFor="state-select" className="block text-sm font-medium text-gray-700 mb-2">
+                  State <span className="text-red-600">*</span>
                 </label>
                 <select
+                  id="state-select"
                   name="district"
                   value={formData.district}
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="">Select District</option>
-                  {SRI_LANKA_DISTRICTS.map(district => (
-                    <option key={district} value={district}>{district}</option>
+                  <option value="">Select State</option>
+                  {INDIAN_STATES.map(state => (
+                    <option key={state} value={state}>{state}</option>
                   ))}
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="location-input" className="block text-sm font-medium text-gray-700 mb-2">
                   Location/Landmark <span className="text-red-600">*</span>
                 </label>
                 <input
+                  id="location-input"
                   type="text"
                   name="location_name"
                   value={formData.location_name}
@@ -289,10 +295,11 @@ const ReportRoadIssuePage: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="city-input" className="block text-sm font-medium text-gray-700 mb-2">
                   City/Town
                 </label>
                 <input
+                  id="city-input"
                   type="text"
                   name="city"
                   value={formData.city}
@@ -312,10 +319,11 @@ const ReportRoadIssuePage: React.FC = () => {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="condition-select" className="block text-sm font-medium text-gray-700 mb-2">
                   Condition Type <span className="text-red-600">*</span>
                 </label>
                 <select
+                  id="condition-select"
                   name="condition"
                   value={formData.condition}
                   onChange={handleChange}
@@ -333,10 +341,11 @@ const ReportRoadIssuePage: React.FC = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="severity-select" className="block text-sm font-medium text-gray-700 mb-2">
                   Severity Level <span className="text-red-600">*</span>
                 </label>
                 <select
+                  id="severity-select"
                   name="severity"
                   value={formData.severity}
                   onChange={handleChange}
@@ -350,10 +359,11 @@ const ReportRoadIssuePage: React.FC = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="lanes-select" className="block text-sm font-medium text-gray-700 mb-2">
                   Affected Lanes
                 </label>
                 <select
+                  id="lanes-select"
                   name="affected_lanes"
                   value={formData.affected_lanes}
                   onChange={handleChange}
@@ -366,10 +376,11 @@ const ReportRoadIssuePage: React.FC = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="traffic-select" className="block text-sm font-medium text-gray-700 mb-2">
                   Traffic Status
                 </label>
                 <select
+                  id="traffic-select"
                   name="traffic_status"
                   value={formData.traffic_status}
                   onChange={handleChange}
@@ -383,10 +394,11 @@ const ReportRoadIssuePage: React.FC = () => {
                 </select>
               </div>
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="description-textarea" className="block text-sm font-medium text-gray-700 mb-2">
                   Description <span className="text-red-600">*</span>
                 </label>
                 <textarea
+                  id="description-textarea"
                   name="description"
                   value={formData.description}
                   onChange={handleChange}
@@ -404,10 +416,11 @@ const ReportRoadIssuePage: React.FC = () => {
             <h2 className="text-xl font-bold text-gray-900 mb-4">Additional Information</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="clearance-time-input" className="block text-sm font-medium text-gray-700 mb-2">
                   Estimated Clearance Time
                 </label>
                 <input
+                  id="clearance-time-input"
                   type="text"
                   name="estimated_clearance_time"
                   value={formData.estimated_clearance_time}
@@ -417,10 +430,11 @@ const ReportRoadIssuePage: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="alternative-route-input" className="block text-sm font-medium text-gray-700 mb-2">
                   Alternative Route (if known)
                 </label>
                 <input
+                  id="alternative-route-input"
                   type="text"
                   name="alternative_route"
                   value={formData.alternative_route}
@@ -460,14 +474,16 @@ const ReportRoadIssuePage: React.FC = () => {
 
               {formData.casualties_reported && (
                 <div className="ml-8">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="casualties-count-input" className="block text-sm font-medium text-gray-700 mb-2">
                     Number of Casualties
                   </label>
                   <input
+                    id="casualties-count-input"
                     type="number"
                     name="casualties_count"
                     value={formData.casualties_count}
                     onChange={handleChange}
+                    placeholder="Enter number of casualties"
                     min="0"
                     className="w-32 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   />

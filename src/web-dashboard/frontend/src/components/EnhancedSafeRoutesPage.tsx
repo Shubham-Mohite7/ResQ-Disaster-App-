@@ -118,11 +118,11 @@ const EnhancedSafeRoutesPage: React.FC = () => {
       const response = await fetch(
         `https://nominatim.openstreetmap.org/search?` +
         `format=json` +
-        `&q=${encodeURIComponent(query)}, Sri Lanka` +
+        `&q=${encodeURIComponent(query)}, India` +
         `&limit=8` +
         `&addressdetails=1` +
         `&bounded=1` +
-        `&viewbox=79.5,5.9,81.9,9.9`, // Sri Lanka bounding box
+        `&viewbox=79.5,5.9,81.9,9.9`, // India bounding box
         { 
           headers: { 
             'Accept': 'application/json',

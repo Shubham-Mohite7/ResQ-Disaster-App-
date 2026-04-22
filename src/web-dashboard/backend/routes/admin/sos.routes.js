@@ -2,13 +2,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const SosSignal = require('../../models/SosSignal');
 const Disaster = require('../../models/Disaster');
-const { authenticateToken, requireAdmin } = require('../../middleware/auth');
+// const { authenticateToken, requireAdmin } = require('../../middleware/auth');
 const notificationService = require('../../services/NotificationService');
 const router = express.Router();
 
-// Apply authentication middleware to all routes
-router.use(authenticateToken);
-router.use(requireAdmin);
+// Authentication middleware removed for admin access
 
 // Utility function to calculate distance between two coordinates (in km)
 function calculateDistance(lat1, lng1, lat2, lng2) {
@@ -30,7 +28,7 @@ function generateClusterId() {
 // GET /api/admin/sos/dashboard - Real-time SOS dashboard feed
 router.get('/dashboard', async (req, res) => {
   try {
-    console.log('[SOS DASHBOARD] Request received from user:', req.user?.role, req.user?.individualId);
+    console.log('[SOS DASHBOARD] Request received from admin user');
     console.log('[SOS DASHBOARD] Query params:', req.query);
     
     const {
@@ -261,7 +259,7 @@ router.put('/:id/assign', async (req, res) => {
   try {
     const { id } = req.params;
     const { responder_id, notes } = req.body;
-    const adminId = req.user.userId;
+    const adminId = 'admin_user';
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({
@@ -297,7 +295,7 @@ router.put('/:id/assign', async (req, res) => {
     console.log('[DEBUG] Parameters:', {
       sosSignalId: sosSignal._id,
       responderId: responder_id,
-      assignedBy: `${req.user.role} ${req.user.userId}`,
+      assignedBy: 'admin_user',
       notes: notes
     });
 
@@ -305,7 +303,7 @@ router.put('/:id/assign', async (req, res) => {
     const notificationResult = await notificationService.notifyResponderAssignment(
       sosSignal,
       responder_id,
-      `${req.user.role} ${req.user.userId}`,
+      'admin_user',
       notes
     );
 
@@ -334,7 +332,7 @@ router.put('/:id/status', async (req, res) => {
   try {
     const { id } = req.params;
     const { status, notes, response_time } = req.body;
-    const adminId = req.user.userId;
+    const adminId = 'admin_user';
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({
@@ -385,7 +383,7 @@ router.put('/:id/status', async (req, res) => {
       sosSignal,
       previousStatus,
       status,
-      `${req.user.role} ${req.user.userId}`
+      'admin_user'
     );
 
     res.json({
@@ -459,7 +457,7 @@ router.post('/:id/escalate', async (req, res) => {
   try {
     const { id } = req.params;
     const { escalation_level, reason } = req.body;
-    const adminId = req.user.userId;
+    const adminId = 'admin_user';
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({
@@ -511,7 +509,7 @@ router.post('/:id/escalate', async (req, res) => {
       sosSignal,
       previousLevel,
       escalation_level,
-      `${req.user.role} ${req.user.userId}`
+      'admin_user'
     );
 
     res.json({

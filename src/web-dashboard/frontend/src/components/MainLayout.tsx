@@ -50,7 +50,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+      <header className="bg-white shadow-lg border-b-2 border-gray-200 fixed top-0 left-0 right-0 z-50">
         <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-6">
           <div className="flex justify-between items-center h-16 lg:h-20">
             <div className="flex items-center space-x-2 sm:space-x-4">
@@ -104,6 +104,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
               <button
                 onClick={handleLogout}
                 className="md:hidden inline-flex items-center p-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                title="Logout"
               >
                 <LogOut className="w-4 h-4" />
               </button>
@@ -113,18 +114,18 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       </header>
 
       {/* Main Layout with Sidebar */}
-      <div className="flex relative">
+      <div className="flex relative pt-16 lg:pt-20">
         {/* Mobile Sidebar Overlay */}
         {sidebarOpen && (
           <div 
-            className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+            className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
             onClick={() => setSidebarOpen(false)}
           />
         )}
         
         {/* Sidebar */}
         <div className={`
-          fixed lg:static inset-y-0 left-0 z-50
+          fixed lg:static inset-y-0 left-0 z-40
           w-64 bg-white shadow-sm border-r border-gray-200 
           transform transition-transform duration-300 ease-in-out
           lg:transform-none

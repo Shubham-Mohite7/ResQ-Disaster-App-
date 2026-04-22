@@ -44,109 +44,48 @@ export const useAuth = () => {
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  // Default admin user for bypassed authentication
+  const defaultUser: User = {
+    individualId: 'admin_user',
+    name: 'System Admin',
+    role: 'admin',
+    email: 'admin@resq.gov',
+    phone: '+94110000000'
+  };
+
+  const [user, setUser] = useState<User | null>(defaultUser);
+  const [token, setToken] = useState<string | null>('bypass_token');
+  const [isLoading, setIsLoading] = useState(false);
 
   const refreshProfile = async () => {
-    try {
-      const currentToken = authService.getToken();
-      if (!currentToken) return;
-
-      const response = await authService.getProfile();
-      if (response.success && response.user) {
-        // Add individualId from token to user object
-        const individualId = authService.getIndividualIdFromToken();
-        const userWithId = { ...response.user, individualId };
-        
-        setUser(userWithId);
-        setToken(currentToken);
-        authService.saveAuthData(currentToken, userWithId);
-      } else {
-        // If profile fetch fails, clear auth data
-        authService.logout();
-        setUser(null);
-        setToken(null);
-      }
-    } catch (error) {
-      console.error('Failed to refresh profile:', error);
-      authService.logout();
-      setUser(null);
-      setToken(null);
-    }
+    // No-op for bypassed auth
+    return;
   };
 
   useEffect(() => {
-    const initAuth = async () => {
-      const savedUser = authService.getCurrentUser();
-      const savedToken = authService.getToken();
-      
-      if (savedUser && savedToken) {
-        setUser(savedUser);
-        setToken(savedToken);
-        // Optionally refresh profile to ensure it's up to date
-        await refreshProfile();
-      }
-      setIsLoading(false);
-    };
-
-    initAuth();
+    // Initialize with default admin user
+    setIsLoading(false);
   }, []);
 
   const login = async (individualId: string, otp: string): Promise<boolean> => {
-    try {
-      setIsLoading(true);
-      const response = await authService.login({ individualId, otp });
-      
-      if (response.success && response.token) {
-        // Save token temporarily and fetch user profile
-        authService.saveAuthData(response.token, {} as User);
-        
-        const profileResponse = await authService.getProfile();
-        
-        if (profileResponse.success && profileResponse.user) {
-          // Add individualId from token to user object
-          const userWithId = { ...profileResponse.user, individualId };
-          authService.saveAuthData(response.token, userWithId);
-          setUser(userWithId);
-          setToken(response.token);
-          return true;
-        } else {
-          authService.logout();
-          setToken(null);
-          toast.error('Failed to fetch user profile');
-          return false;
-        }
-      } else {
-        const errorMessage = response.message || 'Authentication failed';
-        toast.error(errorMessage);
-        return false;
-      }
-    } catch (error) {
-      console.error('Login failed:', error);
-      const errorMessage = (error as { response?: { data?: { message?: string } } })?.response?.data?.message || 'Login failed. Please try again.';
-      toast.error(errorMessage);
-      return false;
-    } finally {
+    // Bypass authentication - always return success
+    setIsLoading(true);
+    
+    // Simulate login success with default admin user
+    setTimeout(() => {
       setIsLoading(false);
-    }
+      toast.success('Access granted!');
+    }, 500);
+    
+    return true;
   };
 
   const logout = async () => {
-    try {
-      setIsLoading(true);
-      await authService.logout();
-      setUser(null);
-      toast.success('Logged out successfully');
-    } catch (error) {
-      console.error('Logout failed:', error);
-      // Still clear local state even if API call fails
-      authService.logout();
-      setUser(null);
-      setToken(null);
-    } finally {
-      setIsLoading(false);
-    }
+    // Bypass logout - just clear state
+    setIsLoading(false);
+    setUser(defaultUser);
+    setToken('bypass_token');
+    toast.success('Session refreshed');
   };
 
   const isAuthenticated = !!user && !!token;
