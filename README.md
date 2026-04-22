@@ -44,8 +44,8 @@ License
 - This project is licensed under the Apache License 2.0. Apache-2.0 is a permissive, widely-used open-source license that allows commercial use, modification, distribution and private use while protecting contributors with a patent grant. If you rely on third-party or government data/APIs, confirm their reuse terms separately.
 
 Support / Contact
-- Security issues: use `.github/ISSUE_TEMPLATE/security_disclosure.md` or email the maintainer at `shalonfernando52@gmail.com`.
-- General questions or PR/maintainer contact: `shalonfernando52@gmail.com`.
+- Security issues: use `.github/ISSUE_TEMPLATE/security_disclosure.md` or email the maintainer at `shubham.mohite7@example.com`.
+- General questions or PR/maintainer contact: `shubham.mohite7@example.com`.
 
 ----
 
