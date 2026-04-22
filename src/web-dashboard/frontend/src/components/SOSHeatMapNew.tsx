@@ -207,8 +207,7 @@ const SOSHeatMap: React.FC = () => {
   const [sosSignals, setSosSignals] = useState<SosSignal[]>([]);
   const [sosLoading, setSosLoading] = useState(true);
   const [filters, setFilters] = useState<Filters>({});
-  const [mapCenter, setMapCenter] = useState<[number, number]>(INDIA_CENTER);
-
+  
   // Fetch SOS data function
   const fetchSosData = useCallback(async () => {
     setSosLoading(true);

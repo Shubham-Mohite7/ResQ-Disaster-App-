@@ -62,7 +62,7 @@ function App() {
               <Route 
                 path="/sos" 
                 element={
-                  <ProtectedRoute requiredRole="admin">
+                  <ProtectedRoute>
                     <SOSDashboard />
                   </ProtectedRoute>
                 } 
@@ -90,7 +90,7 @@ function App() {
               <Route 
                 path="/map/sos" 
                 element={
-                  <ProtectedRoute requiredRole="admin">
+                  <ProtectedRoute>
                     <SOSHeatMap />
                   </ProtectedRoute>
                 } 
@@ -168,7 +168,7 @@ function App() {
               <Route 
                 path="/admin/missing-persons/review" 
                 element={
-                  <ProtectedRoute requiredRole="admin">
+                  <ProtectedRoute>
                     <AdminReviewDashboard />
                   </ProtectedRoute>
                 } 

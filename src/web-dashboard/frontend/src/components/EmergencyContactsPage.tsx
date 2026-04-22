@@ -4,7 +4,6 @@ import { Phone, AlertTriangle, Shield, MapPin, Users, RefreshCw } from 'lucide-r
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import CitizenNavbar from './CitizenNavbar';
-import { API_BASE_URL } from '../config/api';
 
 interface DistrictContact {
   district: string;

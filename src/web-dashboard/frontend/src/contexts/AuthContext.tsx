@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { authService, type User } from '../services/authService';
+import { type User } from '../services/authService';
 import toast from 'react-hot-toast';
 
 // Permission definitions
@@ -67,7 +67,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsLoading(false);
   }, []);
 
-  const login = async (individualId: string, otp: string): Promise<boolean> => {
+  const login = async (_individualId: string, _otp: string): Promise<boolean> => {
     // Bypass authentication - always return success
     setIsLoading(true);
     

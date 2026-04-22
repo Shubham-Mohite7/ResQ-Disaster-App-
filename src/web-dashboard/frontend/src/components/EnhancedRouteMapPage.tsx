@@ -101,7 +101,7 @@ const EnhancedRouteMapPage: React.FC<RouteMapViewProps> = () => {
   // Get route data from navigation state
   const { fromCoords, toCoords, fromLocation, toLocation, route, safetyAnalysis } = location.state || {};
   
-  const [mapCenter, setMapCenter] = useState<[number, number]>([20.5937, 78.9629]); // India center as fallback
+  const [mapCenter] = useState<[number, number]>([20.5937, 78.9629]); // India center as fallback
   const [showDangerZones, setShowDangerZones] = useState(true);
   const [showRoute, setShowRoute] = useState(true);
   

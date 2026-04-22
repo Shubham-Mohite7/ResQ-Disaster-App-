@@ -1,14 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import {
-  AlertTriangle,
-  MapPin,
-  RefreshCw,
-  Download,
-  TrendingUp,
-  Users,
-  Activity,
-  Shield
-} from 'lucide-react';
+import { Users, AlertTriangle, RefreshCw, Download, Shield, Activity, MapPin } from 'lucide-react';
 import {
   BarChart as RechartsBarChart,
   Bar as RechartsBar,
@@ -28,7 +19,6 @@ import {
 import MainLayout from './MainLayout';
 import toast from 'react-hot-toast';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 
 interface CitizenAnalyticsData {
   overview: {
