@@ -1,7 +1,8 @@
 {
-  "name": "frontend",
+  "name": "resq-india-frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "2.0.0",
+  "description": "ResQ India Disaster Management Platform - Frontend",
   "type": "module",
   "scripts": {
     "dev": "vite",

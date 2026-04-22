@@ -1,9 +1,10 @@
-# 🚨 ResQ - National Disaster Response Platform
+# 🚨 ResQ - India Disaster Management Platform
 
-[![Production Status](https://img.shields.io/badge/status-production%20deployed-brightgreen)](https://resq-five.vercel.app)
+[![Production Status](https://img.shields.io/badge/status-production%20ready-brightgreen)](https://resq-five.vercel.app)
 [![Built For](https://img.shields.io/badge/built%20for-India-orange)](https://www.ndma.gov.in)
+[![Author](https://img.shields.io/badge/author-Shubham%20Mohite-blue)](https://github.com/Shubham-Mohite7)
 
-**ResQ Hub — Version 1.1** (Released: 2025-12-05)
+**ResQ India - Version 2.0** (Released: 2026-04-22)
 
 ## What's New (v1.1)
 
@@ -13,7 +14,7 @@
 - Updated documentation and changelog entries for v1.1.
 
 
-ResQ (Rescue) is a production disaster-response platform for India — live flood monitoring, SOS reporting, relief coordination and admin dashboards. This repository contains the web frontend, mobile app, and backend services.
+ResQ (Rescue) is an independent disaster-response platform for India - live flood monitoring, SOS reporting, relief coordination and admin dashboards. This is an independent project by Shubham Mohite, focused on disaster management for India.
 
 Live deployment (primary):
 - Frontend: https://resq-five.vercel.app
@@ -392,9 +393,9 @@ The platform implements a sophisticated dual authentication system to handle dif
   - Geospatial indexing for location queries
   - Automatic backups
   - High availability cluster
-- **Version Control**: GitHub (disaster-response-sl/resq)
-  - Feature branch workflow
-  - Protected main branch
+- **Version Control**: GitHub (Shubham-Mohite7/ResQ-Disaster-App-)
+  - Independent project repository
+  - Open source collaboration
 - **CI/CD**: Automatic deployment on push to main/feature branches
 
 ## 📚 API Documentation
@@ -450,7 +451,7 @@ GET /public-data-api?type=requests&urgency=emergency&lat=6.9271&lng=79.8612&radi
 
 #### 1. Clone the repository
 ```bash
-git clone https://github.com/disaster-response-sl/resq.git
+git clone https://github.com/Shubham-Mohite7/ResQ-Disaster-App-.git
 cd resq
 ```
 
@@ -603,19 +604,22 @@ npm run dev
 - `GET /api/mobile/chat-logs` - Get chat history
 - `POST /api/mobile/chat` - Send chat message
 
-## 👥 Team
+## Author & Development
 
-### Development Team
-- **Shalon Fernando** - Lead Software Engineer & Full Stack Architect
-  
-- **Gaindu** - Web Dashboard Development
-  
-- **Lehan** - Web Dashboard Development
-  
-- **Pavith** - Web Dashboard Development
+### Lead Developer
+- **Shubham Mohite** - Full Stack Developer & Project Lead
+  - Complete Sri Lanka to India migration
+  - Real-time disaster monitoring implementation
+  - SOS emergency response system
+  - AI-powered safety assistant integration
+  - Mobile-responsive web dashboard
+  - Supabase data persistence setup
 
-### Recent Contributions
-- **Shalon**: Production deployment, UI/UX redesign, LankaRouteWatch implementation, location services, debouncing, CORS fixes, environment setup guides, real time api integration.
+### Project Focus
+- **India Disaster Management**: Platform specifically designed for Indian emergency services
+- **Real-time Monitoring**: Live flood data from CWC and disaster tracking
+- **Community-driven**: Citizen reporting and volunteer coordination
+- **Open Source**: Available for collaboration and improvement
 
 ## 🔧 Configuration
 

@@ -1,7 +1,7 @@
 {
-  "name": "backend",
-  "version": "1.0.0",
-  "description": "",
+  "name": "resq-india-backend",
+  "version": "2.0.0",
+  "description": "ResQ India Disaster Management Platform - Backend",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
